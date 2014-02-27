@@ -6,5 +6,11 @@
   "devtools_page": "devtools.html",
   "background": {
     "page": "background.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://google.com/*"],
+      "js": ["content_script.js"]
+    }
+  ]
 }
