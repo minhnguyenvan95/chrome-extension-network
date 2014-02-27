@@ -1,4 +1,4 @@
-engine.io-extension
+Socket.io extension
 ===================
 
-A cross-platform browser extension to visualize engine.io requests
+A cross-platform browser extension to visualize socket.io requests
