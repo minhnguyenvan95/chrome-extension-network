@@ -9,7 +9,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://google.com/*"],
+      "matches": ["http://en.wikipedia.org/*"],
       "js": ["content_script.js"]
     }
   ]
