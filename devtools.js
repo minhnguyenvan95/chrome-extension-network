@@ -6,9 +6,9 @@ var bglog = function(obj) {
 }
 
 chrome.devtools.panels.create(
-    "woop woop",
+    "Socket.io",
     null,
     "panel.html",
     function(panel){
-      bglog('oh hi!');
+      bglog('Socket.io panel created');
 });

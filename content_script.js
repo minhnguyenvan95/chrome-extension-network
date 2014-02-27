@@ -17,3 +17,6 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
 
 // base case
 chrome.extension.sendMessage({type: "echo", count: 0});
+
+
+console.log(getEventListeners(chrome));

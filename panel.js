@@ -5,4 +5,4 @@ var bglog = function(obj) {
   }
 }
 
-bglog('sup');
+bglog('--panel.js--');
