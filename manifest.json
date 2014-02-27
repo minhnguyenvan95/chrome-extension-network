@@ -6,5 +6,11 @@
   "devtools_page": "devtools.html",
   "background": {
     "page": "background.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://en.wikipedia.org/*"],
+      "js": ["content_script.js"]
+    }
+  ]
 }
