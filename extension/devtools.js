@@ -11,4 +11,8 @@ chrome.devtools.panels.create(
     "panel.html",
     function(panel){
       bglog('Socket.io panel created');
+      chrome.devtools.network.onRequestFinished.addListener(
+        function(request){
+          bglog(request.request.url);
+      });
 });
