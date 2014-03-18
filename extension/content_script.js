@@ -18,5 +18,11 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
 // base case
 chrome.extension.sendMessage({type: "echo", count: 0});
 
-
-console.log(getEventListeners(chrome));
+setTimeout(10, function(){
+  console.log('eh');
+  if (window.socket) {
+    console.log('debug socket found!');
+  } else {
+    console.log('debug socket not found');
+  }
+});

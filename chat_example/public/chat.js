@@ -1,5 +1,6 @@
 window.onload = function () {
   var socket = io.connect();
+  window.socket = socket;
 
   socket.on('connect', function () {
     // send a join event with your name

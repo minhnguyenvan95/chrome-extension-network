@@ -9,7 +9,7 @@ app = express.createServer(
 );
 
 // listen
-app.listen(3000);
+app.listen(3001);
 
 // sio
 var io = sio.listen(app);
