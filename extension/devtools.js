@@ -15,4 +15,5 @@ chrome.devtools.panels.create(
         function(request){
           bglog(request.request.url);
       });
+     //bglog(chrome.devtools.panels);
 });
