@@ -16,13 +16,21 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
 });
 
 // base case
-chrome.extension.sendMessage({type: "echo", count: 0});
+// chrome.extension.sendMessage({type: "echo", count: 0});
 
-setTimeout(10, function(){
-  console.log('eh');
-  if (window.socket) {
-    console.log('debug socket found!');
-  } else {
-    console.log('debug socket not found');
-  }
+/*$(window).load(function() {
+  console.log('load');
+  console.log(window.socket);
+});*/
+
+var s = document.createElement("script");
+s.src = chrome.extension.getURL('script/script.js');
+(document.head||document.documentElement).appendChild(s);
+
+s.onload = function() {
+  s.parentNode.removeChild(s);
+}
+
+document.addEventListener('E123', function(e) {
+  console.log(e.detail);
 });

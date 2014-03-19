@@ -1,6 +1,11 @@
 window.onload = function () {
   var socket = io.connect();
+  socket.name = "test_socket";
   window.socket = socket;
+  window.secret = "shhh its secret";
+
+  console.log('all set');
+  window.secret = "something secret";
 
   socket.on('connect', function () {
     // send a join event with your name
