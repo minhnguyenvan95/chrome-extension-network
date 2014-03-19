@@ -1,6 +1,5 @@
 window.onload = function () {
   var socket = io.connect();
-  socket.name = "test_socket";
   window.socket = socket;
   window.secret = "shhh its secret";
 
@@ -20,6 +19,11 @@ window.onload = function () {
     li.className = 'announcement';
     li.innerHTML = msg;
     document.getElementById('messages').appendChild(li);
+  });
+
+  console.log('listen to everything');
+  socket.on('*', function(p) {
+    console.log(p);
   });
 
   socket.on('text', addMessage);

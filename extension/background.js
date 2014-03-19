@@ -17,6 +17,10 @@ var onMessageListener = function(message, sender, sendResponse) {
         );
       });
       break;
+
+    case "socket.io":
+      console.log(message.obj);
+      break;
   }
   return true;
 }

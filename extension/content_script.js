@@ -33,4 +33,5 @@ s.onload = function() {
 
 document.addEventListener('E123', function(e) {
   console.log(e.detail);
+  chrome.extension.sendMessage({type: "socket.io", detail: e.detail});
 });

@@ -25,7 +25,3 @@ io.sockets.on('connection', function (socket) {
     fn(Date.now());
   });
 });
-
-// only use polling for now
-io.set('transports', ['xhr-polling']);
-
