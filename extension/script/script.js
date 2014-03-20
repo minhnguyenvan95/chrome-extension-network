@@ -7,10 +7,22 @@ var socket_timeout = setInterval(function() {
 
     console.log(window.socket.$events);
 
+    var socket_id = window.socket.socket ? window.socket.socket.sessionid : 0;
+
+
     window.socket.on('text', function(msg, txt) {
       console.log('gotmsg');
-      document.dispatchEvent(new CustomEvent('E123', {
-        detail: msg + ': ' + txt
+
+      var socket_obj = {
+        socket_id: socket_id,
+        type: 'text',
+        args: arguments
+      };
+
+      console.log(socket_obj);
+
+      document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
+        detail: socket_obj
       }));
     });
   }

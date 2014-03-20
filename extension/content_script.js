@@ -31,7 +31,7 @@ s.onload = function() {
   s.parentNode.removeChild(s);
 }
 
-document.addEventListener('E123', function(e) {
+document.addEventListener('Socket.io.SocketEvent', function(e) {
   console.log(e.detail);
-  chrome.extension.sendMessage({type: "socketio", obj: e.detail});
+  chrome.extension.sendMessage({type: "socket_event", obj: e.detail});
 });

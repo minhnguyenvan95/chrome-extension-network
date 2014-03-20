@@ -18,7 +18,7 @@ var onMessageListener = function(message, sender, sendResponse) {
       });
       break;
 
-    case "socketio":
+    case "socket_event":
       console.log(message.obj);
       break;
   }

@@ -21,11 +21,6 @@ window.onload = function () {
     document.getElementById('messages').appendChild(li);
   });
 
-  console.log('listen to everything');
-  socket.on('*', function(p) {
-    console.log(p);
-  });
-
   socket.on('text', addMessage);
 
   function addMessage (from, text) {
