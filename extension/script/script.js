@@ -1,17 +1,32 @@
-// Poll for a socket
-
+// Poll for the existence of debug socket
 var socket_timeout = setInterval(function() {
   if (window.socket) {
-    console.log('nerp');
+    console.log('[sio] Global socket found.');
     clearInterval(socket_timeout);
 
-    console.log(window.socket.$events);
+    // Session ID to differentiate sockets
+    var socket_id = window.socket.socket ? window.socket.socket.sessionid : 0;
 
-    window.socket.on('text', function(msg, txt) {
-      console.log('gotmsg');
-      document.dispatchEvent(new CustomEvent('E123', {
-        detail: msg + ': ' + txt
-      }));
-    });
+    // Handle an arbitrary socket event
+    var handleSocketEvent = function(evt) {
+      window.socket.on(evt, function(msg, txt) {
+        var socket_obj = {
+          socket_id: socket_id,
+          type: evt,
+          args: arguments
+        };
+
+        console.log('[sio] received socket data');
+
+        document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
+          detail: socket_obj
+        }));
+      });
+    }
+
+    // Handle all socket events
+    for (evt in window.socket.$events) {
+      handleSocketEvent(evt);
+    }
   }
 }, 150);

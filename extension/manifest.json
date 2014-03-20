@@ -8,7 +8,8 @@
     "page": "background.html"
   },
   "permissions": [
-    "webRequest"
+    "webRequest",
+    "tabs"
   ],
   "content_scripts": [
     {
