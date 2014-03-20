@@ -18,10 +18,11 @@ var onMessageListener = function(message, sender, sendResponse) {
       });
       break;
 
-    case "socket.io":
+    case "socketio":
       console.log(message.obj);
       break;
   }
   return true;
 }
+
 chrome.runtime.onMessage.addListener(onMessageListener);
