@@ -1,9 +1,7 @@
-// this javascript will be injected into every page you load
-// (or really, any page that matches the regular expression in manifest.json)
+// This script is injected into any loaded page at the end of the document
+// as specified in the manifest
 
-// therefore, you can (hopefully) use this to capture socket.io information,
-// send a copy to the extension, then send it on its way
-
+/*
 var maxEcho = 8;
 
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
@@ -17,12 +15,9 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
 
 // base case
 // chrome.extension.sendMessage({type: "echo", count: 0});
+*/
 
-/*$(window).load(function() {
-  console.log('load');
-  console.log(window.socket);
-});*/
-
+// Inject the script
 var s = document.createElement("script");
 s.src = chrome.extension.getURL('script/script.js');
 (document.head||document.documentElement).appendChild(s);
@@ -31,7 +26,16 @@ s.onload = function() {
   s.parentNode.removeChild(s);
 }
 
+// Listen for socket events from the injected script
 document.addEventListener('Socket.io.SocketEvent', function(e) {
   console.log(e.detail);
   chrome.extension.sendMessage({type: "socket_event", obj: e.detail});
+});
+
+
+// experiment
+chrome.extension.onMessage.addListener(function (message, sender) {
+  console.log("In CS, message is: "+message);
+  // send info to background
+  chrome.extension.sendMessage(' my url is: '+window.location.origin);
 });
