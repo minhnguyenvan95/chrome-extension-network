@@ -3,10 +3,13 @@ var onMessageListener = function(message, sender, sendResponse) {
     case "bglog":
       console.log(message.obj);
       break;
+    case "socket_event":
+      console.log(message.obj);
+      break;
 
     // a little "hello world" to show the page's javascript interacting
     // with the extension's javascript
-    case "echo":
+    /*case "echo":
       // we need to ask chrome what windows are open first
       console.log("got message " + message.count);
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -16,11 +19,7 @@ var onMessageListener = function(message, sender, sendResponse) {
           function(response) {}
         );
       });
-      break;
-
-    case "socket_event":
-      console.log(message.obj);
-      break;
+      break;*/
   }
   return true;
 }
