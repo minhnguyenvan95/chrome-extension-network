@@ -6,10 +6,6 @@ var bglog = function(obj) {
   }
 }
 
-
-
-
-
 chrome.devtools.panels.create(
     "Socket.io",
     null,

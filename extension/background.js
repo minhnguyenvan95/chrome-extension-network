@@ -1,35 +1,34 @@
 // Set up communication channel with devtools
 chrome.extension.onConnect.addListener(function (port) {
   port.postMessage('[B->D] PONG');
+  console.log('port connected: '+port.name);
+
+  var listener = function(message, sender, sendResponse) {
+    switch(message.type) {
+      case "bglog":
+        console.log(message.obj);
+        break;
+      case "socket_event":
+        console.log(message.obj);
+        if (port) {
+          port.postMessage(message.obj);
+        }
+        break;
+    }
+  };
+
+  // Handle messages from content scripts
+  chrome.extension.onMessage.addListener(listener);
 
   // Handle messages from devtools
   port.onMessage.addListener(function (message) {
     console.log('[D->B] '+message);
   });
 
-  // Handle messages from content scripts
-  chrome.extension.onMessage.addListener(
-    function(message, sender, sendResponse) {
-      switch(message.type) {
-        case "bglog":
-          console.log(message.obj);
-          break;
-        case "socket_event":
-          console.log(message.obj);
-          port.postMessage(message.obj);
-          break;
-      }
-      return true;
+  port.onDisconnect.addListener(function (message) {
+    console.log('disconnected + removed listener');
+    port = null;
+    chrome.extension.onMessage.removeListener(listener);
   });
-});
 
-/*chrome.tabs.query({
-  "status": "complete",
-  "currentWindow": true,
-  "url": "http://www.google.co.in/"
-}, function (tabs) {
-  for (tab in tabs) {
-    // send message to content scripts
-    chrome.tabs.sendMessage(tabs[tab].id, message);
-  }
-});*/
+});
