@@ -14,9 +14,10 @@ s.onload = function() {
 document.addEventListener('Socket.io.SocketEvent', function(e) {
   console.log('message from ' + e.detail.socket_id);
   console.log(e.detail);
+
   chrome.extension.sendMessage({
-    type: "socket_event",
-    socket_id: e.socket_id,
+    type: e.detail.event,
+    socket_id: e.detail.socket_id,
     obj: e.detail
   });
 });
