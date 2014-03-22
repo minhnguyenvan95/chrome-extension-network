@@ -1,3 +1,5 @@
+// Can't use chrome.extension stuff in this namespace
+
 // Poll for the existence of debug socket
 var socket_timeout = setInterval(function() {
   if (window.socket) {
@@ -15,8 +17,6 @@ var socket_timeout = setInterval(function() {
           type: evt,
           args: arguments
         };
-
-        console.log('[sio] received socket data');
 
         document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
           detail: socket_obj

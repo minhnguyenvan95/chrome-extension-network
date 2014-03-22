@@ -1,34 +1,42 @@
+// Initial background page setup
+var ports = {};
+
 // Set up communication channel with devtools
 chrome.extension.onConnect.addListener(function (port) {
-  port.postMessage('[B->D] PONG');
-  console.log('port connected: '+port.name);
+  // Add this new connection to list of ports
+  ports[port.portId_] = port;
 
-  var listener = function(message, sender, sendResponse) {
-    switch(message.type) {
-      case "bglog":
-        console.log(message.obj);
-        break;
-      case "socket_event":
-        console.log(message.obj);
-        if (port) {
-          port.postMessage(message.obj);
-        }
+  /*// Handle messages from devtools
+  port.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log('[D->B] '+ request);
+    switch (request.type) {
+      case 'socket.io.register':
+        console.log('registering ' + request.id);
+        console.log(sendResponse);
+        //sendResponse(port.portId_);
         break;
     }
-  };
-
-  // Handle messages from content scripts
-  chrome.extension.onMessage.addListener(listener);
-
-  // Handle messages from devtools
-  port.onMessage.addListener(function (message) {
-    console.log('[D->B] '+message);
-  });
+  });*/
 
   port.onDisconnect.addListener(function (message) {
     console.log('disconnected + removed listener');
-    port = null;
-    chrome.extension.onMessage.removeListener(listener);
+    delete ports[port.portId_];
   });
+});
 
+// Listen for messages
+chrome.extension.onMessage.addListener(function(req, sender, res) {
+  switch (req.type) {
+    case 'bglog':
+      console.log(req.obj);
+      break;
+    case 'socket_event':
+      console.log(req.obj);
+      for (port_id in ports) {
+        if (ports[port_id]) {
+          ports[port_id].postMessage(req.obj);
+        }
+      }
+      break;
+  }
 });
