@@ -19,15 +19,23 @@ port.onMessage.addListener(function (msg) {
   var leftcol = document.getElementById("leftlist");
   var centerdiv = document.getElementById("contentcolumn").getElementsByClassName("innertube")[0];
 
-  if (msg == undefined || msg == null || msg.tab_id != chrome.devtools.inspectedWindow.tabId) {
+  // check for malformed message
+  if (msg == undefined || msg == null) {
     return;
   }
 
+  // check for message corresponding to other browser tabs
+  if (msg.tab_id != chrome.devtools.inspectedWindow.tabId) {
+    return;
+  }
+
+  // create new message list on a new socket id
   if (sockets[msg.socket_id] == undefined) {
     var leftLI = document.createElement("li");
     leftcol.appendChild(leftLI);
     leftLI.innerText = msg.socket_id;
     leftLI.addEventListener("click", function(e) {
+      // change messages displayed in center panel
       var clicked = e.target.innerText;
       sockets[visible].centerUL.style.display = "none";
       sockets[clicked].centerUL.style.display = "block";
@@ -48,11 +56,15 @@ port.onMessage.addListener(function (msg) {
 
   var centerUL = sockets[msg.socket_id].centerUL;
   var li = document.createElement("li");
-  var plaintext = '<span class="socket_msg_type">' + msg.type + ':</span> { ';
-  for (var arg in msg.args) {
-    plaintext += arg + ' : ' + msg.args[arg] + ', ';
+  // socket's msg.type is displayed in its own css class: socket_msg_type
+  var plaintext = '<span class="socket_msg_type">' + msg.type + '</span> {';
+  if (args.length > 0) {
+    plaintext += ' ';
+    for (var arg in msg.args) {
+      plaintext += arg + ' : ' + msg.args[arg] + ', ';
+    }
+    plaintext = plaintext.substring(0, plaintext.length-2);
   }
-  plaintext = plaintext.substring(0, plaintext.length-2);
   plaintext += ' }';
 
   li.innerHTML = plaintext;
