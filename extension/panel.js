@@ -5,8 +5,6 @@ var bglog = function(obj) {
   }
 }
 
-bglog('--- starting panel.js scripts ---');
-
 // Create a connection to the background page
 var port = chrome.extension.connect({
   name: "socket.io-devtools-panel"
@@ -19,7 +17,9 @@ port.onMessage.addListener(function (msg) {
   var info_div = document.getElementById('info');
   var socket_info = msg;
 
-  if (socket_info) {
+  // Only show messages from the current tab
+  if (socket_info &&
+      socket_info.tab_id == chrome.devtools.inspectedWindow.tabId) {
     var plaintext = '['+socket_info.socket_id+']['+
                         socket_info.type+'] ';
     for (arg in socket_info.args) {
