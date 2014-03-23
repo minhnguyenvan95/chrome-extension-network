@@ -32,6 +32,7 @@ port.onMessage.addListener(function (msg) {
   // create new message list on a new socket id
   if (sockets[msg.socket_id] == undefined) {
     var leftLI = document.createElement("li");
+    leftLI.class = "socketListElement";
     leftcol.appendChild(leftLI);
     leftLI.innerText = msg.socket_id;
     leftLI.addEventListener("click", function(e) {
@@ -42,6 +43,7 @@ port.onMessage.addListener(function (msg) {
     })
 
     var centerUL = document.createElement("ul");
+    centerUL.class = "messageList";
     if (visible == null) {
       visible = msg.socket_id;
     } else if (visible != msg.socket_id) {
@@ -56,6 +58,8 @@ port.onMessage.addListener(function (msg) {
 
   var centerUL = sockets[msg.socket_id].centerUL;
   var li = document.createElement("li");
+  li.class = "messageListElement";
+
   // socket's msg.type is displayed in its own css class: socket_msg_type
   var plaintext = '<span class="socket_msg_type">' + msg.type + '</span> {';
   if (args.length > 0) {
