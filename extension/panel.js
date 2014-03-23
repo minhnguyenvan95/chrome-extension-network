@@ -12,21 +12,52 @@ var port = chrome.extension.connect({
   name: "socket.io-devtools-panel"
 });
 
+var sockets = {};
+var visible = null;
+
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
-  var new_el = document.createElement('p');
-  var info_div = document.getElementById('info');
-  var socket_info = msg;
+  var leftcol = document.getElementById("leftlist");
+  var centerdiv = document.getElementById("contentcolumn").getElementsByClassName("innertube")[0];
 
-  if (socket_info) {
-    var plaintext = '['+socket_info.socket_id+']['+
-                        socket_info.type+'] ';
-    for (arg in socket_info.args) {
-      plaintext = plaintext + socket_info.args[arg] + ' ';
+  if (msg == undefined || msg == null) {
+    return;
+  }
+
+  if (sockets[msg.socket_id] == undefined) {
+    var leftLI = document.createElement("li");
+    leftcol.appendChild(leftLI);
+    leftLI.innerText = msg.socket_id;
+    leftLI.addEventListener("click", function(e) {
+      var clicked = e.target.innerText;
+      sockets[visible].centerUL.style.display = "none";
+      sockets[clicked].centerUL.style.display = "block";
+    })
+
+    var centerUL = document.createElement("ul");
+    if (visible == null) {
+      visible = msg.socket_id;
+    } else if (visible != msg.socket_id) {
+      centerUL.style.display = "none";
     }
+    centerdiv.appendChild(centerUL);
 
-    new_el.innerHTML = plaintext;
-    info_div.appendChild(new_el);
-  };
+    sockets[msg.socket_id] = { 
+      centerUL : centerUL
+    };
+  }
+
+  var centerUL = sockets[msg.socket_id].centerUL;
+  var li = document.createElement("li");
+  var plaintext = '<span class="socket_msg_type">' + msg.type + ':</span> { ';
+  for (var arg in msg.args) {
+    plaintext += arg + ' : ' + msg.args[arg] + ', ';
+  }
+  plaintext = plaintext.substring(0, plaintext.length-2);
+  plaintext += ' }';
+
+  li.innerHTML = plaintext;
+
+  centerUL.appendChild(li);
 });

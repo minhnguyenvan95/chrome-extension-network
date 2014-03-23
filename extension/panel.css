@@ -53,6 +53,14 @@ padding: 4px 0;
 color: #FFFF80;
 }
 
+.socket_msg_type{
+color: #F00;
+}
+
+ul{
+list-style-type: none;
+}
+
 .innertube{
 margin: 10px; /*Margins for inner DIV inside each column (to provide padding)*/
 margin-top: 0;
