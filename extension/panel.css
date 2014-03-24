@@ -24,6 +24,7 @@ width: 100%;
 
 #contentcolumn{
 margin: 0 200px 0 230px; /*Margins for content column. Should be "0 RightColumnWidth 0 LeftColumnWidth*/
+height: 100%;
 }
 
 #leftcolumn{
@@ -31,6 +32,7 @@ float: left;
 width: 200px; /*Width of left column*/
 margin-left: -100%;
 background: #C8FC98;
+height: 100%;
 }
 
 #rightcolumn{
@@ -38,6 +40,7 @@ float: left;
 width: 200px; /*Width of right column*/
 margin-left: -200px; /*Set left marginto -(RightColumnWidth)*/
 background: #FDE95E;
+height: 100%;
 }
 
 #footer{
@@ -59,6 +62,7 @@ color: #F00;
 
 ul{
 list-style-type: none;
+border: 5px 5px 5px 5px;
 }
 
 .innertube{
