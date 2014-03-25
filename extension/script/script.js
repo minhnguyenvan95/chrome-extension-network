@@ -33,11 +33,24 @@ var socket_timeout = setInterval(function() {
     (function() {
       var proxied = window.socket.emit;
       window.socket.emit = function() {
+
+        var args = [];
+        for (x in arguments) {
+          if(typeof(arguments[x]) == 'function') {
+            args.push(arguments[x].toString());
+          } else {
+            args.push(arguments[x]);
+          }
+        }
+        args.push({'a':3,'b':4});
+
+        console.log(args);
+
         var socket_obj = {
           event: 'socket_emit',
           socket_id: socket_id,
           type: arguments[0],
-          args: undefined//Array.prototype.slice.call(arguments).slice(1,arguments.length)
+          args: args 
         };
 
         console.log(socket_obj);
