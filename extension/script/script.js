@@ -12,11 +12,22 @@ var socket_timeout = setInterval(function() {
     // log all 'socket.on' events
     var handleSocketEvent = function(evt) {
       window.socket.on(evt, function(msg, txt) {
+
+        var args = [];
+        for (var x = 0; x < arguments.length; x++) {
+
+          if(typeof(arguments[x]) == 'function') {
+            args.push({function: arguments[x].toString()});
+          } else {
+            args.push(arguments[x]);
+          }
+        }
+
         var socket_obj = {
           event: 'socket_listen',
           socket_id: socket_id,
           type: evt,
-          args: arguments
+          args: args
         };
 
         document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
@@ -35,16 +46,14 @@ var socket_timeout = setInterval(function() {
       window.socket.emit = function() {
 
         var args = [];
-        for (x in arguments) {
+        for (var x = 1; x < arguments.length; x++) {
+
           if(typeof(arguments[x]) == 'function') {
-            args.push(arguments[x].toString());
+            args.push({function: arguments[x].toString()});
           } else {
             args.push(arguments[x]);
           }
         }
-        args.push({'a':3,'b':4});
-
-        console.log(args);
 
         var socket_obj = {
           event: 'socket_emit',
@@ -52,8 +61,6 @@ var socket_timeout = setInterval(function() {
           type: arguments[0],
           args: args 
         };
-
-        console.log(socket_obj);
 
         document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
           detail: socket_obj

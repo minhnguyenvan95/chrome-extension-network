@@ -16,7 +16,7 @@ var visible = null;
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
-  var timesamp = Date.now();
+  bglog(msg);
   var leftcol = document.getElementById("socketList");
   var centerdiv = document.getElementById("contentcolumn").getElementsByClassName("innertube")[0];
 
@@ -69,7 +69,6 @@ port.onMessage.addListener(function (msg) {
   var plaintext = '<span class="socket_msg_type">' + direction + " " +  msg.type + '</span> { ';
   var argcount = 0;
   for (var arg in msg.args) {
-    bglog(msg.args);
     plaintext += JSON.stringify(msg.args[arg]) + ', ';
     argcount++
   }

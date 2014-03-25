@@ -19,11 +19,12 @@ chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
 // Listen for socket events from the injected script
 // requires tab to be registered
 document.addEventListener('Socket.io.SocketEvent', function(e) {
-	console.log(e);
   e.detail.tab_id = tab_id;
+
+  e.detail.timestamp = e.timestamp;
 
   chrome.extension.sendMessage({
     type: e.detail.event,
-    obj: e.detail
+    obj: e.detail,
   });
 }.bind(this));
