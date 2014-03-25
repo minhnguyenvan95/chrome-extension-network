@@ -37,8 +37,10 @@ var socket_timeout = setInterval(function() {
           event: 'socket_emit',
           socket_id: socket_id,
           type: arguments[0],
-          args: [arguments[1]]
+          args: undefined//Array.prototype.slice.call(arguments).slice(1,arguments.length)
         };
+
+        console.log(socket_obj);
 
         document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
           detail: socket_obj

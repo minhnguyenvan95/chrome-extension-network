@@ -69,3 +69,7 @@ border: 5px 5px 5px 5px;
 margin: 10px; /*Margins for inner DIV inside each column (to provide padding)*/
 margin-top: 0;
 }
+
+.innertube li {
+	cursor: default
+}
