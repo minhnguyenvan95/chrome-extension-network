@@ -1,14 +1,12 @@
 window.onload = function () {
   var socket = io.connect();
-  window.socket = socket;
-  window.secret = "shhh its secret";
-
-  console.log('all set');
-  window.secret = "something secret";
+  var nickname;
+  window.socket = socket;             // TODO reconsider how we get this
 
   socket.on('connect', function () {
-    // send a join event with your name
-    socket.emit('join', prompt('What is your nickname?'));
+    // Get user nickname
+    nickname = prompt('What is your nickname?');
+    socket.emit('join', nickname);
 
     // show the chat
     document.getElementById('chat').style.display = 'block';
@@ -22,22 +20,51 @@ window.onload = function () {
   });
 
   socket.on('text', addMessage);
+  socket.on('numbers', addMessage);
 
-  function addMessage (from, text) {
+  function addMessage (from) {
+    var args = Array.prototype.slice.call(arguments);
+    var messages = args.slice(1);
+    console.log(arguments);
+    console.log(messages);
+
     var li = document.createElement('li');
     li.className = 'message';
-    li.innerHTML = '<b>' + from + '</b>: ' + text;
+    var inner = '<b>' + from + '</b>: ';
+
+    for (msg in messages) {
+      inner = inner + ' ' + messages[msg];
+    }
+
+    li.innerHTML = inner;
+
     document.getElementById('messages').appendChild(li);
     return li;
   }
 
   var input = document.getElementById('input');
   document.getElementById('form').onsubmit = function () {
+
+    // Visually add message from self
+    console.log(input.value);
     var li = addMessage('me', input.value);
-    socket.emit('text', input.value, function (date) {
-      li.className = 'confirmed';
-      li.title = date;
-    });
+
+    // determine the type of chat message from the first word
+    var message = input.value.split(' ');
+    switch (message[0]) {
+      case 'numbers':
+        socket.emit('numbers', 0, 1, 2, function (date) {
+        li.className = 'confirmed';
+        li.title = date;
+        });
+        break;
+      default:  // text
+        socket.emit('text', input.value, function (date) {
+          li.className = 'confirmed';
+          li.title = date;
+        });
+        break;
+    }
 
     // reset the input
     input.value = '';
@@ -45,5 +72,4 @@ window.onload = function () {
 
     return false;
   }
-
 }
