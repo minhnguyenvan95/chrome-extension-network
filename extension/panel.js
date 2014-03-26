@@ -12,12 +12,10 @@ var port = chrome.extension.connect({
 
 var sockets = {};
 var visible = null;
-var visibleLi = null;
 
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
-  bglog(msg);
   var pane1 = document.getElementById("socketList");
   var pane2 = document.getElementById("Pane-2");
 
@@ -28,41 +26,31 @@ port.onMessage.addListener(function (msg) {
 
   // check for message corresponding to other browser tabs
   if (msg.tab_id != chrome.devtools.inspectedWindow.tabId) {
-    bglog('other browser tab msg');
     return;
   }
 
   // create new message list on a new socket id
   if (sockets[msg.socket_id] == undefined) {
-    bglog("new socket");
     var socketLi = document.createElement("li")
     var a = document.createElement("a");
     a.innerText = msg.socket_id;
    
     socketLi.addEventListener("click", function(e) {
       // change messages displayed in center panel
-      bglog('hello ');
-      e.target.className = "active";
-      alert(e.target.className);
-      bglog("1");
-      //visibleLi.className = "";
       var clicked = e.target.innerText;
-      bglog("2");
       sockets[visible].pane2List.style.display = "none";
+      sockets[visible].socketLi.className = "";
       sockets[clicked].pane2List.style.display = "block";
+      sockets[clicked].socketLi.className = "active";
       visible = clicked;
-      visibleLi = e.target;
     });
-    bglog("3");
     socketLi.appendChild(a);
     pane1.appendChild(socketLi);
-    bglog("4");
     var pane2List = document.createElement("ul");
     pane2List.className = "messageList";
 
     if (visible == null) {
       visible = msg.socket_id;
-      visibleLi = socketLi;
       socketLi.className = "active";
     } else {
       pane2List.style.display = "none";
@@ -72,10 +60,9 @@ port.onMessage.addListener(function (msg) {
     //add to sockets list
     sockets[msg.socket_id] = { 
       pane2List : pane2List,
+      socketLi : socketLi,
       messages : []
     };
-
-    bglog("added to sockets");
   }
 
   var pane2List = sockets[msg.socket_id].pane2List;
