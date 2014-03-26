@@ -17,7 +17,6 @@ var visibleLi = null;
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
-  var timesamp = Date.now();
   bglog(msg);
   var pane1 = document.getElementById("socketList");
   var pane2 = document.getElementById("Pane-2");
@@ -26,9 +25,6 @@ port.onMessage.addListener(function (msg) {
   if (msg == undefined || msg == null) {
     return;
   }
-
-  bglog("curTab: " + chrome.devtools.inspectedWindow.tabId);
-  bglog("msgTab: " + msg.tab_id);
 
   // check for message corresponding to other browser tabs
   if (msg.tab_id != chrome.devtools.inspectedWindow.tabId) {
@@ -90,7 +86,7 @@ port.onMessage.addListener(function (msg) {
   var plaintext = '<span class="socket_msg_type">' + direction + " " +  msg.type + '</span> { ';
   var argcount = 0;
   for (var arg in msg.args) {
-    plaintext += arg + ' : ' + msg.args[arg] + ', ';
+    plaintext += JSON.stringify(msg.args[arg]) + ', ';
     argcount++
   }
   if (argcount != 0) {
