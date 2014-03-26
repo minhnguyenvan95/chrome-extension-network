@@ -1,15 +1,41 @@
 body{
-margin:0;
-padding:0;
-line-height: 1.5em;
+
 }
 
-b{font-size: 110%;}
+
+#Pane-1{
+	float:left;
+	width:33%;
+	height:100%;
+	padding: 5px;
+	margin:5px;
+	background-color: #D6DDE5;
+}
+#Pane-2{
+	float:left;
+	width:33%;
+	height:100%;
+	padding: 5px;
+	margin:5px;
+	background-color: #D6DDE5;
+}
+
+#Pane-3{
+	float:left;
+	width:31%;
+	height:100%;
+	padding: 5px;
+	margin:5px;
+	background-color: #D6DDE5;
+}
+
+
+/*b{font-size: 110%;}
 em{color: red;}
 
 #topsection{
 background: #EAEAEA;
-height: 90px; /*Height of top section*/
+height: 90px; 
 }
 
 #topsection h1{
@@ -23,13 +49,11 @@ width: 100%;
 }
 
 #contentcolumn{
-margin: 0 200px 0 230px; /*Margins for content column. Should be "0 RightColumnWidth 0 LeftColumnWidth*/
-height: 100%;
+margin: 0 200px 0 230px; 
 }
-
 #leftcolumn{
 float: left;
-width: 200px; /*Width of left column*/
+width: 200px; 
 margin-left: -100%;
 background: #C8FC98;
 height: 100%;
@@ -37,8 +61,8 @@ height: 100%;
 
 #rightcolumn{
 float: left;
-width: 200px; /*Width of right column*/
-margin-left: -200px; /*Set left marginto -(RightColumnWidth)*/
+width: 200px; 
+margin-left: -200px; 
 background: #FDE95E;
 height: 100%;
 }
@@ -66,6 +90,7 @@ border: 5px 5px 5px 5px;
 }
 
 .innertube{
-margin: 10px; /*Margins for inner DIV inside each column (to provide padding)*/
+margin: 10px; 
 margin-top: 0;
+*/
 }

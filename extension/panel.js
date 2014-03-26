@@ -12,14 +12,15 @@ var port = chrome.extension.connect({
 
 var sockets = {};
 var visible = null;
+var visibleLi = null;
 
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
   var timesamp = Date.now();
   bglog(msg);
-  var leftcol = document.getElementById("socketList");
-  var centerdiv = document.getElementById("contentcolumn").getElementsByClassName("innertube")[0];
+  var pane1 = document.getElementById("socketList");
+  var pane2 = document.getElementById("Pane-2");
 
   // check for malformed message
   if (msg == undefined || msg == null) {
@@ -31,39 +32,55 @@ port.onMessage.addListener(function (msg) {
 
   // check for message corresponding to other browser tabs
   if (msg.tab_id != chrome.devtools.inspectedWindow.tabId) {
+    bglog('other browser tab msg');
     return;
   }
 
   // create new message list on a new socket id
   if (sockets[msg.socket_id] == undefined) {
-    var leftLI = document.createElement("li");
-    leftLI.className = "socketListElement";
-    leftcol.appendChild(leftLI);
-    leftLI.innerText = msg.socket_id;
-    leftLI.addEventListener("click", function(e) {
+    bglog("new socket");
+    var socketLi = document.createElement("li")
+    var a = document.createElement("a");
+    a.innerText = msg.socket_id;
+   
+    socketLi.addEventListener("click", function(e) {
       // change messages displayed in center panel
+      bglog('hello ');
+      e.target.className = "active";
+      visibleLi.className = "";
       var clicked = e.target.innerText;
-      sockets[visible].centerUL.style.display = "none";
-      sockets[clicked].centerUL.style.display = "block";
+
+      sockets[visible].pane2List.style.display = "none";
+      sockets[clicked].pane2List.style.display = "block";
       visible = clicked;
+      visibleLi = e.target;
     });
 
-    var centerUL = document.createElement("ul");
-    centerUL.className = "messageList";
+    socketLi.appendChild(a);
+    pane1.appendChild(socketLi);
+
+    var pane2List = document.createElement("ul");
+    pane2List.className = "messageList";
+
     if (visible == null) {
       visible = msg.socket_id;
+      socketLi.className = "active";
     } else {
-      centerUL.style.display = "none";
+      pane2List.style.display = "none";
     }
-    centerdiv.appendChild(centerUL);
+    pane2.appendChild(pane2List);
 
+    //add to sockets list
     sockets[msg.socket_id] = { 
-      centerUL : centerUL,
+      pane2List : pane2List,
       messages : []
     };
+
+    bglog("added to sockets");
+    bglog(sockets);
   }
 
-  var centerUL = sockets[msg.socket_id].centerUL;
+  var pane2List = sockets[msg.socket_id].pane2List;
   var li = document.createElement("li");
   li.className = "messageListElement";
 
@@ -83,7 +100,7 @@ port.onMessage.addListener(function (msg) {
 
   li.innerHTML = plaintext;
 
-  centerUL.appendChild(li);
+  pane2List.appendChild(li);
 
   sockets[msg.socket_id].messages.push(msg);
 
