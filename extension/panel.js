@@ -43,28 +43,31 @@ port.onMessage.addListener(function (msg) {
       // change messages displayed in center panel
       bglog('hello ');
       e.target.className = "active";
-      visibleLi.className = "";
+      alert(e.target.className);
+      bglog("1");
+      //visibleLi.className = "";
       var clicked = e.target.innerText;
-
+      bglog("2");
       sockets[visible].pane2List.style.display = "none";
       sockets[clicked].pane2List.style.display = "block";
       visible = clicked;
       visibleLi = e.target;
     });
-
+    bglog("3");
     socketLi.appendChild(a);
     pane1.appendChild(socketLi);
-
+    bglog("4");
     var pane2List = document.createElement("ul");
     pane2List.className = "messageList";
 
     if (visible == null) {
       visible = msg.socket_id;
+      visibleLi = socketLi;
       socketLi.className = "active";
     } else {
       pane2List.style.display = "none";
     }
-    pane2.appendChild(pane2List);
+    
 
     //add to sockets list
     sockets[msg.socket_id] = { 
@@ -73,7 +76,6 @@ port.onMessage.addListener(function (msg) {
     };
 
     bglog("added to sockets");
-    bglog(sockets);
   }
 
   var pane2List = sockets[msg.socket_id].pane2List;
@@ -97,6 +99,7 @@ port.onMessage.addListener(function (msg) {
   li.innerHTML = plaintext;
 
   pane2List.appendChild(li);
+  pane2.appendChild(pane2List);
 
   sockets[msg.socket_id].messages.push(msg);
 
