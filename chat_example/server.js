@@ -34,4 +34,8 @@ io.sockets.on('connection', function (socket) {
     fn(Date.now());
   });
 
+  socket.on('object', function (txt, num, obj) {
+    socket.broadcast.emit('object', socket.nickname, txt, num, obj);
+  });
+
 });

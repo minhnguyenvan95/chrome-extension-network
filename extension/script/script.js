@@ -59,7 +59,7 @@ var socket_timeout = setInterval(function() {
           event: 'socket_emit',
           socket_id: socket_id,
           type: arguments[0],
-          args: args 
+          args: args
         };
 
         document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
