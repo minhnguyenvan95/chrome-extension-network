@@ -61,7 +61,7 @@ window.onload = function () {
         break;
       // Tests objects + nested objects
       case 'object':
-        socket.emit('object', 'test_1', 42, {
+        socket.emit('object', 'test_1', undefined, {
           a: 'test_2',
           b: 42,
           c: {d: 'test_3'}

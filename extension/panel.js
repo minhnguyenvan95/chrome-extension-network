@@ -4,11 +4,14 @@ var bglog = function(obj) {
     chrome.runtime.sendMessage({type: "bglog", obj: obj});
   }
 }
+console.log('flag 1');
 
 // Create a connection to the background page
 var port = chrome.extension.connect({
   name: "socket.io-devtools-panel"
 });
+
+console.log('flag 2');
 
 var sockets = {};
 var visible = null;
