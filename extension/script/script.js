@@ -2,7 +2,52 @@
 
 // Poll for the existence of debug socket
 var socket_timeout = setInterval(function() {
-  if (window.socket) {
+  if (window.WebSocket) {
+   
+    // add logging onmessage listener
+    function captureRecv(ws) {
+      if (typeof ws.captured == 'undefined') {
+        debugger;
+        ws.addEventListener('message', function(e) {
+          var event = {
+              event: 'websocket_recv',
+              from: location,
+              data: e.data,
+              url: e.target.URL
+          }
+          log(event);
+        });
+        ws.captured = true;
+      }
+    }
+   
+    // capture sending
+    var captureSend = window.WebSocket.prototype.send = function() {
+      debugger;
+      captureRecv(this); // in case socket contruction was before constructor switching
+      var event = {
+          event: 'websocket_send',
+          from: location,
+          data: arguments[0],
+          url: this.URL
+      };
+   
+      // console.log(event);
+      return window.WebSocket.prototype.send.apply(this, arguments);
+    }
+   
+    // capture constructor
+    window.WebSocket = function(a,b) {
+      var base;
+      base = (typeof b !== "undefined") ? new WebSocket(a,b) : new WebSocket(a);
+      captureRecv(base);
+      base.send = captureSend;
+      this.__proto__ = WebSocket.constructor;
+      return base;
+    }
+  }
+
+  if (false && window.socket) {
     console.log('[sio] Global socket found.');
     clearInterval(socket_timeout);
 
