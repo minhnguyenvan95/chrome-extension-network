@@ -3,7 +3,7 @@
 
 // Inject the script
 var s = document.createElement("script");
-s.src = chrome.extension.getURL('script/script.js');
+s.src = chrome.extension.getURL('script/xhr_override.js');
 (document.head||document.documentElement).appendChild(s);
 
 s.onload = function() {
@@ -20,7 +20,6 @@ chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
 // requires tab to be registered
 document.addEventListener('Socket.io.SocketEvent', function(e) {
   e.detail.tab_id = tab_id;
-
   e.detail.timestamp = e.timestamp;
 
   chrome.extension.sendMessage({
