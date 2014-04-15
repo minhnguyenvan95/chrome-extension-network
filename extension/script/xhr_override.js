@@ -165,8 +165,6 @@
             args: obj.args
           }
 
-          console.log(socket_obj);
-
           document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
             detail: socket_obj
           }));
@@ -221,8 +219,6 @@
         type: obj.name,
         args: obj.args
       }
-
-      console.log(socket_obj);
 
       document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
         detail: socket_obj
