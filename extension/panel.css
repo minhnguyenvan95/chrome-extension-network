@@ -1,0 +1,95 @@
+body{
+
+}
+
+
+#Pane-1{
+	float:left;
+	width:33%;
+	height:100%;
+	padding: 5px;
+	margin:5px;
+	background-color: #D6DDE5;
+}
+#Pane-2{
+	float:left;
+	width:33%;
+	height:100%;
+	padding: 5px;
+	margin:5px;
+	background-color: #D6DDE5;
+}
+
+#Pane-3{
+	float:left;
+	width:31%;
+	height:100%;
+	padding: 5px;
+	margin:5px;
+	background-color: #D6DDE5;
+}
+
+
+/*b{font-size: 110%;}
+em{color: red;}
+
+#topsection{
+background: #EAEAEA;
+height: 90px; 
+}
+
+#topsection h1{
+margin: 0;
+padding-top: 15px;
+}
+
+#contentwrapper{
+float: left;
+width: 100%;
+}
+
+#contentcolumn{
+margin: 0 200px 0 230px; 
+}
+#leftcolumn{
+float: left;
+width: 200px; 
+margin-left: -100%;
+background: #C8FC98;
+height: 100%;
+}
+
+#rightcolumn{
+float: left;
+width: 200px; 
+margin-left: -200px; 
+background: #FDE95E;
+height: 100%;
+}
+
+#footer{
+clear: left;
+width: 100%;
+background: black;
+color: #FFF;
+text-align: center;
+padding: 4px 0;
+}
+
+#footer a{
+color: #FFFF80;
+}
+
+.socket_msg_type{
+color: #F00;
+}
+
+ul{
+list-style-type: none;
+border: 5px 5px 5px 5px;
+}
+
+.innertube{
+margin: 10px; 
+margin-top: 0;
+*/

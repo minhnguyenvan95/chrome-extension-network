@@ -1,23 +1,39 @@
-var onMessageListener = function(message, sender, sendResponse) {
-  switch(message.type) {
-    case "bglog":
-      console.log(message.obj);
-      break;
+// Initial background page setup
+var ports = {};
 
-    // a little "hello world" to show the page's javascript interacting
-    // with the extension's javascript
-    case "echo":
-      // we need to ask chrome what windows are open first
-      console.log("got message " + message.count);
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(
-          tabs[0].id,
-          {type: "echo", count: message.count + 1},
-          function(response) {}
-        );
-      });
+// Set up communication channel with devtools
+chrome.extension.onConnect.addListener(function (port) {
+  // Add this new connection to list of ports
+  ports[port.portId_] = port;
+
+  port.onDisconnect.addListener(function (message) {
+    console.log('disconnected + removed listener');
+    delete ports[port.portId_];
+  });
+});
+
+// Listen for messages
+chrome.extension.onMessage.addListener(function(req, sender, res) {
+  switch (req.type) {
+    case 'bglog':
+      console.log(req.obj);
+      break;
+    case 'socket_listen':
+      for (port_id in ports) {
+        if (ports[port_id]) {
+          ports[port_id].postMessage(req.obj);
+        }
+      }
+      break;
+    case 'socket_emit':
+      for (port_id in ports) {
+        if (ports[port_id]) {
+          ports[port_id].postMessage(req.obj);
+        }
+      }
+      break;
+    case 'tab.register':
+      res({ tab_id: sender.tab.id });
       break;
   }
-  return true;
-}
-chrome.runtime.onMessage.addListener(onMessageListener);
+});

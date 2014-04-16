@@ -1,22 +1,30 @@
-// this javascript will be injected into every page you load
-// (or really, any page that matches the regular expression in manifest.json)
+// This script is injected into any loaded page at the end of the document
+// as specified in the manifest
 
-// therefore, you can (hopefully) use this to capture socket.io information,
-// send a copy to the extension, then send it on its way
+// Inject the script
+var s = document.createElement("script");
+s.src = chrome.extension.getURL('script/script.js');
+(document.head||document.documentElement).appendChild(s);
 
-var maxEcho = 8;
+s.onload = function() {
+  s.parentNode.removeChild(s);
+}
 
-chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
-  console.log("got message " + message.count);
-  if (message.count < maxEcho) {
-    chrome.extension.sendMessage({type: "echo", count: message.count + 1});
-  }
-  // if we call sendResponse(response) here, it will be picked up by
-  // function(response) in background.js
-});
+// Get curent tab id
+var tab_id;
+chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
+    tab_id = res.tab_id;
+}.bind(this));
 
-// base case
-chrome.extension.sendMessage({type: "echo", count: 0});
+// Listen for socket events from the injected script
+// requires tab to be registered
+document.addEventListener('Socket.io.SocketEvent', function(e) {
+  e.detail.tab_id = tab_id;
 
+  e.detail.timestamp = e.timestamp;
 
-console.log(getEventListeners(chrome));
+  chrome.extension.sendMessage({
+    type: e.detail.event,
+    obj: e.detail,
+  });
+}.bind(this));

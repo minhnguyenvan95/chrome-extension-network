@@ -8,12 +8,17 @@
     "page": "background.html"
   },
   "permissions": [
-    "webRequest"
+    "webRequest",
+    "tabs"
   ],
   "content_scripts": [
     {
-      "matches": ["http://en.wikipedia.org/*"],
-      "js": ["content_script.js"]
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "run-at": "document-end"
     }
+  ],
+  "web_accessible_resources": [
+    "script/*"
   ]
 }
