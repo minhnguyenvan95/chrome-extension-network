@@ -1,14 +1,17 @@
 // Initial background page setup
-var ports = {};
+var ports = [];
+var uniq_id = 0;
 
 // Set up communication channel with devtools
 chrome.extension.onConnect.addListener(function (port) {
   // Add this new connection to list of ports
-  ports[port.portId_] = port;
+  var port_id = uniq_id;
+  uniq_id++;
+  ports[port_id] = port;
 
   port.onDisconnect.addListener(function (message) {
     console.log('disconnected + removed listener');
-    delete ports[port.portId_];
+    delete ports[port_id];
   });
 });
 
@@ -29,6 +32,7 @@ chrome.extension.onMessage.addListener(function(req, sender, res) {
       for (port_id in ports) {
         if (ports[port_id]) {
           ports[port_id].postMessage(req.obj);
+          console.log('post to '+port_id);
         }
       }
       break;
