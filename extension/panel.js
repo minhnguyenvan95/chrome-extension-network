@@ -19,6 +19,7 @@ var visible = null;
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
+  console.log(msg);
   var pane1 = document.getElementById("socketList");
   var pane2 = document.getElementById("Pane-2");
 
