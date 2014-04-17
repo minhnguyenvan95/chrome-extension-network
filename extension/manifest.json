@@ -15,7 +15,7 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content_script.js"],
-      "run-at": "document-end"
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [

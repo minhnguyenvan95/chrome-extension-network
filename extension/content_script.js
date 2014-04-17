@@ -1,14 +1,21 @@
 // This script is injected into any loaded page at the end of the document
 // as specified in the manifest
 
-// Inject the script
-var s = document.createElement("script");
-s.src = chrome.extension.getURL('script/xhr_override.js');
-(document.head||document.documentElement).appendChild(s);
+var scripts = ["ws_override", "xhr_override"];
 
-s.onload = function() {
-  s.parentNode.removeChild(s);
+for (var i = 0; i < scripts.length; i++) {
+	// Inject the script
+	var s = document.createElement("script");
+	var sName = "script/" + scripts[i] + ".js";
+	s.src = chrome.extension.getURL(sName);
+	(document.head||document.documentElement).appendChild(s);
+
+	s.onload = function() {
+	  s.parentNode.removeChild(this);
+	}
 }
+
+
 
 // Get curent tab id
 var tab_id;
