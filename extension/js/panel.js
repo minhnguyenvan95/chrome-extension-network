@@ -5,6 +5,35 @@ var bglog = function(obj) {
   }
 }
 
+//init resizing extension and panel
+$(document).ready(function(){
+  newWidth = $(window).width() - 275;
+  $("#Pane-2").css('width', newWidth);
+});
+
+$('#opener').on('click', function () {
+  console.log("CLICK");
+    var panel = $('#slide-panel');
+    if (panel.hasClass("visible")) {
+      panel.removeClass('visible').animate({
+        'right': '-300px'
+      });
+     } 
+     else {
+      panel.addClass('visible').animate({
+        'right': '0'
+      });
+     }
+     return false;
+});
+
+//set up page resize
+$(window).resize(function(){
+  console.log("WIDTH changed");
+  newWidth = $(window).width() - 275;
+  $("#Pane-2").css('width', newWidth);
+});
+
 // Create a connection to the background page
 var port = chrome.extension.connect({
   name: "socket.io-devtools-panel"
@@ -35,7 +64,7 @@ port.onMessage.addListener(function (msg) {
     var socketLi = document.createElement("li")
     var a = document.createElement("a");
     a.innerText = msg.socket_id;
-   
+
     socketLi.addEventListener("click", function(e) {
       // change messages displayed in center panel
       var clicked = e.target.innerText;
@@ -56,7 +85,6 @@ port.onMessage.addListener(function (msg) {
     } else {
       pane2List.style.display = "none";
     }
-    
 
     //add to sockets list
     sockets[msg.socket_id] = { 

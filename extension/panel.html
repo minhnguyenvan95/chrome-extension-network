@@ -2,8 +2,8 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="panel.css">
 
-	<script src="jquery-2.1.0.min.js"></script>
-	<script src="panel.js"></script>
+	<script src="js/jquery-2.1.0.min.js"></script>
+	<script src= "js/panel.js"></script>
 
 	<!--Bootstrap!-->
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -12,13 +12,43 @@
 </head>
 <body>
 	<div id = "Pane-1" class = "panel panel-default">
-		<ul id = "socketList" class="nav nav-pills nav-stacked">
+		<ul id = "socketList" >
+			<li> Socket 1 </li>
+			<li> Socket 2 </li>
 		</ul>
 	</div>
 	<div id = "Pane-2" class = "panel panel-default">
+    <table class = "table">
+      <tr>
+        <td>Title 1</td>
+        <td >Title 2</td>
+        <td>Title 3</td>
+      </tr>
+      <tr>
+        <td >Row 1</td>
+        <td>Row 1</td>
+        <td>Row 1</td>
+    	</tr>
+      <tr>
+        <td>Row 2</td>
+        <td>Row 2</td>
+        <td>Row 2</td>
+      </tr>
+      <tr>
+       	<td >Row 3</td>
+       	<td>Row 3</td>
+        <td>Row 3</td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="slide-panel"> 
+    <a href="#" class="btn btn-primary" id="opener">
+      <i class="glyphicon glyphicon-backward"></i>
+    </a>
+    Panel Content
+  </div>
 		
-	</div>
-	<div id= "Pane-3" class = "panel panel-default">
 	</div>
 
 </body>
