@@ -209,7 +209,7 @@
 
     // Only echo if there was a post body
     // Socket.io
-    if (vData && this._url && this._url.indexOf('/socket.io') >= 0) {
+    if (vData && this && this._url && this._url.indexOf && this._url.indexOf('/socket.io') >= 0) {
       var obj = vData.substring(vData.indexOf('{'));
       obj = JSON.parse(obj);
 

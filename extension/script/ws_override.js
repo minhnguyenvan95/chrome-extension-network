@@ -32,7 +32,7 @@
     var captureSend = function() {
       captureRecv(this); // in case socket contruction was before constructor switching
       var data = arguments[0];
-      if (data && this.URL && this.url.indexOf("/socket.io") >= 0) {
+      if (data && this && this.URL && this.URL.indexOf && this.url.indexOf("/socket.io") >= 0) {
         var dataStart = data.indexOf('{');
         if (dataStart >= 0) {
           var obj = JSON.parse(data.substring(data.indexOf('{')));
