@@ -1,6 +1,6 @@
-body{
-overflow: hidden;
-background-color: #81878D;
+body {
+  overflow: hidden;
+  background-color: #81878D;
 }
 
 #slide-panel {
@@ -176,6 +176,7 @@ background-color: #81878D;
 	padding: 5px;
 	width:100%;
 	background-color: white;
+  cursor: pointer;
 }
 
 #socketList li:last-child{

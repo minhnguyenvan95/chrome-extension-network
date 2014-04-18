@@ -67,56 +67,76 @@ port.onMessage.addListener(function (msg) {
 
     socketLi.addEventListener("click", function(e) {
       // change messages displayed in center panel
+      console.log('switching to '+msg.socket_id);
       var clicked = e.target.innerText;
-      sockets[visible].pane2List.style.display = "none";
+      sockets[visible].pane2Table.style.display = "none";
       sockets[visible].socketLi.className = "";
-      sockets[clicked].pane2List.style.display = "block";
+      sockets[clicked].pane2Table.style.display = "block";
       sockets[clicked].socketLi.className = "active";
       visible = clicked;
     });
+
     socketLi.appendChild(a);
     pane1.appendChild(socketLi);
-    var pane2List = document.createElement("ul");
-    pane2List.className = "messageList";
+
+    var pane2Table = document.createElement("table");
+    pane2Table.className = "table";
+    var header_row = document.createElement('tr');
+    header_row.innerHTML = '<td>inbound/outbound</td>'+
+                           '<td>type</td>'+
+                           '<td>arguments</td>';
+    pane2Table.appendChild(header_row);
 
     if (visible == null) {
       visible = msg.socket_id;
       socketLi.className = "active";
     } else {
-      pane2List.style.display = "none";
+      pane2Table.style.display = "none";
     }
 
     //add to sockets list
-    sockets[msg.socket_id] = { 
-      pane2List : pane2List,
+    sockets[msg.socket_id] = {
+      pane2Table : pane2Table,
       socketLi : socketLi,
       messages : []
     };
   }
 
-  var pane2List = sockets[msg.socket_id].pane2List;
-  var li = document.createElement("li");
-  li.className = "messageListElement";
+  // create new row upon receiving message
+  var pane2Table = sockets[msg.socket_id].pane2Table;
+  var tr = document.createElement("tr");
 
-  var direction = (msg.event == "socket_listen") ? "inbound" : "outbound";
+  // create direction cell
+  var td_dir = document.createElement("td");
+  td_dir.innerHTML = (msg.event == "socket.listen") ? "inbound" : "outbound";
 
-  // socket's msg.type is displayed in its own css class: socket_msg_type
-  var plaintext = '<span class="socket_msg_type">' + direction + " " +  msg.type + '</span> { ';
-  var argcount = 0;
+  // create type cell
+  var td_type = document.createElement("td");
+  td_type.innerHTML = msg.type;
+
+  // create args cell
+  var td_args = document.createElement("td");
+  var args_string = '{';
+  var argc = 0;
   for (var arg in msg.args) {
-    plaintext += JSON.stringify(msg.args[arg]) + ', ';
-    argcount++
+    args_string += JSON.stringify(msg.args[arg]) + ', ';
+    argc++
   }
-  if (argcount != 0) {
-    plaintext = plaintext.substring(0, plaintext.length-2);
+  if (argc != 0) {
+    args_string = args_string.substring(0, args_string.length-2);
   }
-  plaintext += ' }';
+  args_string += ' }';
+  td_args.innerHTML = args_string;
 
-  li.innerHTML = plaintext;
+  // Create entire row
+  tr.appendChild(td_dir);
+  tr.appendChild(td_type);
+  tr.appendChild(td_args);
 
-  pane2List.appendChild(li);
-  pane2.appendChild(pane2List);
+  // Append the row / table
+  pane2Table.appendChild(tr);
+  pane2.appendChild(pane2Table);
 
+  // keep track of the message in the socket object
   sockets[msg.socket_id].messages.push(msg);
-
 });
