@@ -82,7 +82,7 @@ port.onMessage.addListener(function (msg) {
     var pane2Table = document.createElement("table");
     pane2Table.className = "table";
     var header_row = document.createElement('tr');
-    header_row.innerHTML = '<td>inbound/outbound</td>'+
+    header_row.innerHTML = '<td>direction</td>'+
                            '<td>type</td>'+
                            '<td>arguments</td>';
     pane2Table.appendChild(header_row);
