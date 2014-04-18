@@ -108,7 +108,7 @@ port.onMessage.addListener(function (msg) {
 
   // create direction cell
   var td_dir = document.createElement("td");
-  td_dir.innerHTML = (msg.event == "socket.listen") ? "inbound" : "outbound";
+  td_dir.innerHTML = (msg.event == "socket_listen") ? "inbound" : "outbound";
 
   // create type cell
   var td_type = document.createElement("td");
