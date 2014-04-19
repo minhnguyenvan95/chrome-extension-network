@@ -4,15 +4,17 @@
 var scripts = ["ws_override", "xhr_override"];
 
 for (var i = 0; i < scripts.length; i++) {
-	// Inject the script
-	var s = document.createElement("script");
-	var sName = "script/" + scripts[i] + ".js";
-	s.src = chrome.extension.getURL(sName);
-	(document.head||document.documentElement).appendChild(s);
+  // Inject the script
+  var s = document.createElement("script");
+  var sName = "script/" + scripts[i] + ".js";
+  s.src = chrome.extension.getURL(sName);
+  (document.head||document.documentElement).appendChild(s);
 
-	s.onload = function() {
-	  s.parentNode.removeChild(this);
-	}
+  s.onload = function() {
+    if (s.parentNode && this) {
+      s.parentNode.removeChild(this);
+    }
+  }
 }
 
 
@@ -20,7 +22,7 @@ for (var i = 0; i < scripts.length; i++) {
 // Get curent tab id
 var tab_id;
 chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
-    tab_id = res.tab_id;
+  tab_id = res.tab_id;
 }.bind(this));
 
 // Listen for socket events from the injected script

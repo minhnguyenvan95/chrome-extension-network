@@ -1,7 +1,7 @@
 {
-  "name": "socket.io Chrome extension",
+  "name": "Socket.io Chrome Extension",
   "manifest_version": 2,
-  "description": "does things",
+  "description": "An extension that tracks Socket.io traffic",
   "version": "0.0.1",
   "devtools_page": "devtools.html",
   "background": {
