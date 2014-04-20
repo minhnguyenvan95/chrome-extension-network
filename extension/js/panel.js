@@ -5,33 +5,37 @@ var bglog = function(obj) {
   }
 }
 
-//init resizing extension and panel
-$(document).ready(function(){
-  newWidth = $(window).width() - 275;
-  $("#Pane-2").css('width', newWidth);
-});
-
-$('#opener').on('click', function () {
-  console.log("CLICK");
+$("#opener").click(function(e){
     var panel = $('#slide-panel');
     if (panel.hasClass("visible")) {
       panel.removeClass('visible').animate({
         'right': '-300px'
       });
+      $("#opener-symbol").attr("class", "glyphicon glyphicon-backward");
      } 
      else {
       panel.addClass('visible').animate({
         'right': '0'
       });
+      $("#opener-symbol").attr("class", "glyphicon glyphicon-forward");
      }
      return false;
 });
 
-//set up page resize
-$(window).resize(function(){
-  console.log("WIDTH changed");
+//init resizing extension and panel
+$(document).ready(function(){
   newWidth = $(window).width() - 275;
   $("#Pane-2").css('width', newWidth);
+  $("#opener").css('height', $(window).height());
+  $("#opener").css('padding-top', $(window).height()/2);
+});
+
+//set up page resize
+$(window).resize(function(){
+  newWidth = $(window).width() - 275;
+  $("#Pane-2").css('width', newWidth);
+  $("#opener").css('height', $(window).height());
+  $("#opener").css('padding-top', $(window).height()/2);
 });
 
 // Create a connection to the background page
