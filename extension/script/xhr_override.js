@@ -73,7 +73,7 @@
 
     // Socket.io
     this._url = sUrl;
-    if(sUrl.indexOf && sUrl.indexOf('/socket.io') >= 0) {
+    if(sUrl && sUrl.indexOf && (sUrl.indexOf("/socket.io") >= 0) || (sUrl.indexOf("/engine.io") >= 0)) {
       var temp_url = sUrl.split('?');
       temp_url = (temp_url[0]) ? temp_url[0].split('/') : null;
       this._socket_session_id = temp_url.slice(-1)[0];
@@ -152,7 +152,7 @@
       nState  = oRequest.readyState;
 
       if (typeof(oRequest._url) == 'string' &&
-          oRequest._url.indexOf('/socket.io') >= 0 && nState == 4) {
+          (oRequest._url.indexOf("/socket.io") >= 0) || (oRequest._url.indexOf("/engine.io") >= 0) && nState == 4) {
         var obj_ind = oRequest.responseText.indexOf('{');
         if (obj_ind > 0) {
           var obj = oRequest.responseText.substring(obj_ind);
@@ -209,7 +209,7 @@
 
     // Only echo if there was a post body
     // Socket.io
-    if (vData && this && this._url && this._url.indexOf && this._url.indexOf('/socket.io') >= 0) {
+    if (vData && this && this._url && this._url.indexOf && (this._url.indexOf("/socket.io") >= 0) || (this._url.indexOf("/engine.io") >= 0)) {
       var obj = vData.substring(vData.indexOf('{'));
       obj = JSON.parse(obj);
 

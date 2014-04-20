@@ -9,7 +9,7 @@
     function captureRecv(ws) {
       if (typeof ws.capturedRecv == 'undefined') {
         ws.addEventListener('message', function(e) {
-          if (e.data && this.url && this.url.indexOf("/socket.io") >= 0) {
+          if (e.data && this.url && (this.url.indexOf("/socket.io") >= 0) || (this.url.indexOf("/engine.io") >= 0)) {
             var dataStart = e.data.indexOf('{');
             if (dataStart >= 0) {
               var obj = JSON.parse(e.data.substring(dataStart));
@@ -32,7 +32,7 @@
     var captureSend = function() {
       captureRecv(this); // in case socket contruction was before constructor switching
       var data = arguments[0];
-      if (data && this && this.URL && this.URL.indexOf && this.url.indexOf("/socket.io") >= 0) {
+      if (data && this && this.URL && this.URL.indexOf && (this.url.indexOf("/socket.io") >= 0) || (this.url.indexOf("/engine.io") >= 0)) {
         var dataStart = data.indexOf('{');
         if (dataStart >= 0) {
           var obj = JSON.parse(data.substring(data.indexOf('{')));
