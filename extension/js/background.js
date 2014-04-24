@@ -22,14 +22,19 @@ chrome.extension.onConnect.addListener(function (port) {
     tab_id: tab_id
   };
 
+  // resume overrides, if needed
+  chrome.tabs.sendMessage(tab_id, {type: 'resume.xhr'}, function(response) {
+    console.log(response.farewell);
+  });
+
+
+
   port.onDisconnect.addListener(function (message) {
     console.log('disconnected + removed listener');
 
     // unload overrides
-    chrome.tabs.query({}, function(tabs) {
-      chrome.tabs.sendMessage(tab_id, {event: "unload_overrides"}, function(response) {
-        console.log(response.farewell);
-      });
+    chrome.tabs.sendMessage(tab_id, {type: 'suspend.xhr'}, function(response) {
+      console.log(response.farewell);
     });
     delete ports[port_id];
   });
