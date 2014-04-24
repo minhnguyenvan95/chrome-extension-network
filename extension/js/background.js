@@ -32,12 +32,25 @@ chrome.extension.onMessage.addListener(function(req, sender, res) {
       for (port_id in ports) {
         if (ports[port_id]) {
           ports[port_id].postMessage(req.obj);
-          console.log('post to '+port_id);
         }
       }
       break;
     case 'tab.register':
       res({ tab_id: sender.tab.id });
       break;
+  }
+});
+
+// Listen for url updates / refreshes
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  var obj = {
+    event: 'tab_change',
+    tab_id: tabId
+  };
+
+  for (port_id in ports) {
+    if (ports[port_id]) {
+      ports[port_id].postMessage(obj);
+    }
   }
 });
