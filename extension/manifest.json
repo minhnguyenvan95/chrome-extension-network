@@ -16,6 +16,11 @@
       "matches": ["<all_urls>"],
       "js": ["script/content_script.js"],
       "run_at": "document_start"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["script/xhr_override.js"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [

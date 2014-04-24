@@ -1,7 +1,7 @@
 // This script is injected into any loaded page at the end of the document
 // as specified in the manifest
 
-var scripts = ["ws_override", "xhr_override"];
+var scripts = ["ws_override"];
 
 for (var i = 0; i < scripts.length; i++) {
   // Inject the script
@@ -36,3 +36,14 @@ document.addEventListener('Socket.io.SocketEvent', function(e) {
     obj: e.detail,
   });
 }.bind(this));
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  /*alert(sender.tab ?
+    "from a content script:" + sender.tab.url :
+    "from the extension");
+*/
+  if (request.greeting == "unload_overrides") {
+    document.dispatchEvent(new CustomEvent('Socket.io.SuspendXHR', {}));
+    sendResponse({farewell: "overrides unloaded"})
+  };
+});

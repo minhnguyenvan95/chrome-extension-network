@@ -370,4 +370,14 @@
 
   // Register new object with window
   window.XMLHttpRequest  = cXMLHttpRequest;
+
+  // enable toggling between XHR versions
+  document.addEventListener('Socket.io.ResumeXHR', function(e) {
+    window.XMLHttpRequest = cXMLHttpRequest;
+    console.log('XHR resumed');
+  });
+  document.addEventListener('Socket.io.SuspendXHR', function(e) {
+    window.XMLHttpRequest = oXMLHttpRequest;
+    alert('XHR suspended');
+  });
 })();
