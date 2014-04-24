@@ -1,7 +1,7 @@
 // This script is injected into any loaded page at the end of the document
 // as specified in the manifest
 
-var scripts = ["ws_override", "xhr_override"];
+var scripts = ["ws_override","xhr_override"];
 
 for (var i = 0; i < scripts.length; i++) {
   // Inject the script
@@ -21,8 +21,10 @@ for (var i = 0; i < scripts.length; i++) {
 
 // Get curent tab id
 var tab_id;
+
 chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
   tab_id = res.tab_id;
+  console.log('my tab id: '+tab_id);
 }.bind(this));
 
 // Listen for socket events from the injected script
@@ -36,3 +38,21 @@ document.addEventListener('Socket.io.SocketEvent', function(e) {
     obj: e.detail,
   });
 }.bind(this));
+
+
+chrome.runtime.onMessage.addListener(
+  function(req, sender, res) {
+    console.log(req.type);
+
+    switch(req.type) {
+      case('suspend.xhr'):
+        document.dispatchEvent(new CustomEvent('Socket.io.SuspendXHR', {}));
+        break;
+      case('resume.xhr'):
+        document.dispatchEvent(new CustomEvent('Socket.io.ResumeXHR', {}));
+        break;
+    }
+
+    res({farewell: "goodbye"});
+});
+

@@ -40,7 +40,7 @@ $(window).resize(function(){
 
 // Create a connection to the background page
 var port = chrome.extension.connect({
-  name: "socket.io-devtools-panel"
+  name: 'socket.io-'+chrome.devtools.inspectedWindow.tabId
 });
 
 var sockets = {};
