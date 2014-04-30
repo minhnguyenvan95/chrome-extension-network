@@ -24,17 +24,13 @@ chrome.extension.onConnect.addListener(function (port) {
 
   // resume overrides, if needed
   chrome.tabs.sendMessage(tab_id, {type: 'resume.xhr'}, function(response) {
-    console.log(response.farewell);
   });
 
 
 
   port.onDisconnect.addListener(function (message) {
-    console.log('disconnected + removed listener');
-
     // unload overrides
     chrome.tabs.sendMessage(tab_id, {type: 'suspend.xhr'}, function(response) {
-      console.log(response.farewell);
     });
     delete ports[port_id];
   });
@@ -42,13 +38,14 @@ chrome.extension.onConnect.addListener(function (port) {
 
 // Listen for messages
 chrome.extension.onMessage.addListener(function(req, sender, res) {
+  console.log(req);
   switch (req.type) {
     case 'bglog':
       console.log(req.obj);
       break;
     case 'socket_listen':
-      for (port_id in ports && ports[port_id].port) {
-        if (ports[port_id]) {
+      for (port_id in ports) {
+        if (ports[port_id] && ports[port_id].port) {
           ports[port_id].port.postMessage(req.obj);
         }
       }
