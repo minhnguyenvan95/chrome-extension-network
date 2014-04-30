@@ -16,8 +16,6 @@
 
 (function () {
 
-  console.log('xhr hi');
-
   // Save reference to earlier defined object implementation (if any)
   var oXMLHttpRequest  = window.XMLHttpRequest;
 
@@ -75,8 +73,7 @@
 
     // Socket.io
     this._url = sUrl;
-    if(sUrl && sUrl.indexOf && (sUrl.indexOf("/socket.io") >= 0) ||
-       (sUrl.indexOf("/engine.io") >= 0)) {
+    if(sUrl && sUrl.indexOf && (sUrl.indexOf("/socket.io") >= 0) || (sUrl.indexOf("/engine.io") >= 0)) {
       var temp_url = sUrl.split('?');
       temp_url = (temp_url[0]) ? temp_url[0].split('/') : null;
       this._socket_session_id = temp_url.slice(-1)[0];
@@ -86,14 +83,25 @@
     if (arguments.length < 3)
       bAsync  = true;
 
-    // Save async parameter for fixing Gecko bug with missing readystatechange
-    // in synchronous requests
+    // Save async parameter for fixing Gecko bug with missing readystatechange in synchronous requests
     this._async    = bAsync;
 
     // Set the onreadystatechange handler
     var oRequest  = this,
       nState    = this.readyState,
       fOnUnload;
+
+    // BUGFIX: IE - memory leak on page unload (inter-page leak)
+    if (bIE && bAsync) {
+      fOnUnload = function() {
+        if (nState != cXMLHttpRequest.DONE) {
+          fCleanTransport(oRequest);
+          // Safe to abort here since onreadystatechange handler removed
+          oRequest.abort();
+        }
+      };
+      window.attachEvent("onunload", fOnUnload);
+    }
 
     // Add method sniffer
     if (cXMLHttpRequest.onopen)
@@ -131,18 +139,20 @@
         // Free up queue
         delete oRequest._data;
         fCleanTransport(oRequest);
+
+        // BUGFIX: IE - memory leak in interrupted
+        if (bIE && bAsync)
+          window.detachEvent("onunload", fOnUnload);
       }
 
-      // BUGFIX: Some browsers (Internet Explorer, Gecko) 
-      // fire OPEN readystate twice
+      // BUGFIX: Some browsers (Internet Explorer, Gecko) fire OPEN readystate twice
       if (nState != oRequest.readyState)
         fReadyStateChange(oRequest);
 
       nState  = oRequest.readyState;
 
       if (typeof(oRequest._url) == 'string' &&
-          (oRequest._url.indexOf("/socket.io") >= 0) || 
-            (oRequest._url.indexOf("/engine.io") >= 0) && nState == 4) {
+          (oRequest._url.indexOf("/socket.io") >= 0) || (oRequest._url.indexOf("/engine.io") >= 0) && nState == 4) {
         var obj_ind = oRequest.responseText.indexOf('{');
         if (obj_ind > 0) {
           var obj = oRequest.responseText.substring(obj_ind);
@@ -155,8 +165,6 @@
             args: obj.args
           }
 
-          console.log('dispatching [listen]!');
-          console.log(socket_obj);
           document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
             detail: socket_obj
           }));
@@ -194,18 +202,14 @@
       vData  = null;
 
     if (vData && vData.nodeType) {
-      vData  = window.XMLSerializer ?
-        new window.XMLSerializer().serializeToString(vData) : 
-        vData.xml;
+      vData  = window.XMLSerializer ? new window.XMLSerializer().serializeToString(vData) : vData.xml;
       if (!this._headers["Content-Type"])
         this._object.setRequestHeader("Content-Type", "application/xml");
     }
 
     // Only echo if there was a post body
     // Socket.io
-    if (vData && this && this._url && this._url.indexOf &&
-        (this._url.indexOf("/socket.io") >= 0) ||
-          (this._url.indexOf("/engine.io") >= 0)) {
+    if (vData && this && this._url && this._url.indexOf && (this._url.indexOf("/socket.io") >= 0) || (this._url.indexOf("/engine.io") >= 0)) {
       var obj = vData.substring(vData.indexOf('{'));
       obj = JSON.parse(obj);
 
@@ -216,8 +220,6 @@
         args: obj.args
       }
 
-      console.log('dispatching [emit]!');
-      console.log(socket_obj);
       document.dispatchEvent(new CustomEvent('Socket.io.SocketEvent', {
         detail: socket_obj
       }));
@@ -350,10 +352,21 @@
   };
 
   function fCleanTransport(oRequest) {
+    // BUGFIX: IE - memory leak (on-page leak)
+    // oRequest._object.onreadystatechange = new window.Function;
     oRequest._object.onreadystatechange = null;
   };
 
-  window.XMLHttpRequest = cXMLHttpRequest;
+  // Internet Explorer 5.0 (missing apply)
+  if (!window.Function.prototype.apply) {
+    window.Function.prototype.apply  = function(oRequest, oArguments) {
+      if (!oArguments)
+        oArguments  = [];
+      oRequest.__func  = this;
+      oRequest.__func(oArguments[0], oArguments[1], oArguments[2], oArguments[3], oArguments[4]);
+      delete oRequest.__func;
+    };
+  };
 
   // enable toggling between XHR versions
   document.addEventListener('Socket.io.ResumeXHR', function(e) {
