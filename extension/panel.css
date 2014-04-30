@@ -1,6 +1,9 @@
 body {
   overflow: hidden;
-  background-color: #81878D;
+}
+
+h3{
+  margin-top:0px;
 }
 
 #slide-panel {
