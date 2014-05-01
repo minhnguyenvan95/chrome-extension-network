@@ -32,6 +32,7 @@ chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
 document.addEventListener('Socket.io.SocketEvent', function(e) {
   e.detail.tab_id = tab_id;
   e.detail.timestamp = e.timestamp;
+  e.detail.url = document.URL;
 
   console.log(e.detail);
 

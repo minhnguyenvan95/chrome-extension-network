@@ -13,12 +13,14 @@ app.listen(8000);
 
 // sio
 var io = sio.listen(app);
-io.sockets.on('connection', function (socket) {
 
-  socket.on('join', function (name) {
-    socket.nickname = name;
-    socket.broadcast.emit('announcement', name + ' joined the chat.');
-  });
+io.sockets.on('connection', function(socket){
+	socket.on('join', function(name){
+		socket.nickname = name;
+		socket.broadcast.emit('announcement', name + ' joined the chat.');
+	    });
+    });
+io.sockets.on('connection', function (socket) {
 
   socket.on('text', function (msg, fn) {
     socket.broadcast.emit('text', socket.nickname, msg);

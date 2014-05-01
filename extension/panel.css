@@ -3,7 +3,12 @@ body {
 }
 
 h3{
+  display: inline;
   margin-top:0px;
+}
+
+h4{
+  color: #6B6B6B;
 }
 
 #slide-panel {
@@ -16,6 +21,13 @@ h3{
   top: 0;
   right: -300px;
 }
+
+#clearButton{
+  padding: 3px 3px 4px 4px;
+  float:right;
+  margin-right: 20px;
+}
+
 #opener {
   float:left;
   padding: 5px;
@@ -46,8 +58,10 @@ h3{
 }
 
 .table {
-  margin:0px;padding:0px;
-  width:100%;
+  margin:0px;
+  margin-top:10px;
+  padding:0px;
+  width:95%;
   min-width:600px;
   border:1px solid #c1c1c1;
   

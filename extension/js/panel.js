@@ -5,6 +5,23 @@ var bglog = function(obj) {
   }
 }
 
+$("#clearButton").click(function(e){
+ // var table = document.getElementById("dataTable");
+  var table = sockets[$("#clearButton").data("socket")].pane2Table;
+  var tableRows = table.getElementsByTagName('tr');
+  var rowCount = tableRows.length;
+
+  for (var x=rowCount-1; x>0; x--) {
+    table.removeChild(tableRows[x]);
+  }
+
+  //add back info
+  var info = document.createElement("h4");
+  info.setAttribute("id", "Pane-2-Info");
+  info.innerText = "No data available";
+  pane2.appendChild(info);
+});
+
 $("#opener").click(function(e){
     var panel = $('#slide-panel');
     if (panel.hasClass("visible")) {
@@ -49,8 +66,9 @@ var visible = null;
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
+
   var pane1 = document.getElementById("socketList");
-  var pane2 = document.getElementById("Pane-2");
+  var pane2 = document.getElementById("Pane-2-TableArea");
 
   // check for malformed message
   if (msg == undefined || msg == null) {
@@ -75,22 +93,35 @@ port.onMessage.addListener(function (msg) {
     while (pane2.firstChild) {
       pane2.removeChild(pane2.firstChild);
     }
+    // add back the info
+    var info = document.createElement("h4");
+    info.setAttribute("id", "Pane-2-Info");
+    info.innerText = "No data available";
+    pane2.appendChild(info);
   }
 
   if (msg.event == "socket_emit" || msg.event == "socket_listen") {
+
+    //remove info messages if sockets are added
+    $("#Pane-1-Info").remove();
     // create new message list on a new socket id
     if (sockets[msg.socket_id] == undefined) {
+
+      //remove info message if data added
+      $("#Pane-2-Info").remove();
       var socketLi = document.createElement("li")
       var a = document.createElement("a");
+
       a.innerText = msg.socket_id;
 
-      socketLi.addEventListener("click", function(e) {
+      a.addEventListener("click", function(e) {
         // change messages displayed in center panel
         var clicked = e.target.innerText;
         sockets[visible].pane2Table.style.display = "none";
         sockets[visible].socketLi.className = "";
         sockets[clicked].pane2Table.style.display = "block";
         sockets[clicked].socketLi.className = "active";
+        $("#clearButton").data("socket", clicked);
         visible = clicked;
       });
 
@@ -99,9 +130,11 @@ port.onMessage.addListener(function (msg) {
 
       var pane2Table = document.createElement("table");
       pane2Table.className = "table";
+      pane2Table.setAttribute("id", "dataTable");
       var header_row = document.createElement('tr');
       header_row.innerHTML = '<td>direction</td>'+
                              '<td>type</td>'+
+                             '<td>url</td>' +
                              '<td>arguments</td>';
       pane2Table.appendChild(header_row);
 
@@ -122,6 +155,9 @@ port.onMessage.addListener(function (msg) {
 
     // create new row upon receiving message
     var pane2Table = sockets[msg.socket_id].pane2Table;
+
+    //init delete button
+    $("#clearButton").data("socket", msg.socket_id);
     var tr = document.createElement("tr");
 
     // create direction cell
@@ -131,6 +167,10 @@ port.onMessage.addListener(function (msg) {
     // create type cell
     var td_type = document.createElement("td");
     td_type.innerHTML = msg.type;
+
+    // create url cell
+    var td_url = document.createElement("td");
+    td_url.innerHTML = msg.url;
 
     // create args cell
     var td_args = document.createElement("td");
@@ -148,6 +188,7 @@ port.onMessage.addListener(function (msg) {
     // Create entire row
     tr.appendChild(td_dir);
     tr.appendChild(td_type);
+    tr.appendChild(td_url);
     tr.appendChild(td_args);
 
     // Append the row / table
