@@ -144,11 +144,11 @@ port.onMessage.addListener(function (msg) {
 
       a.innerText = msg.socket_id;
 
-      a.addEventListener("click", function(e) {
+      socketLi.addEventListener("click", function(e) {
         // change messages displayed in center panel
         var clicked = e.target.innerText;
         sockets[visible].pane2Table.style.display = "none";
-        sockets[visible].socketLi.className = "";
+        sockets[visible].socketLi.className = ".disabled";
         sockets[clicked].pane2Table.style.display = "block";
         sockets[clicked].socketLi.className = "active";
         $("#clearButton").data("socket", clicked);
@@ -168,12 +168,6 @@ port.onMessage.addListener(function (msg) {
                              '<td>arguments</td>';
       pane2Table.appendChild(header_row);
 
-      if (visible == null) {
-        visible = msg.socket_id;
-        socketLi.className = "active";
-      } else {
-        pane2Table.style.display = "none";
-      }
 
       //add to sockets list
       sockets[msg.socket_id] = {
@@ -182,6 +176,19 @@ port.onMessage.addListener(function (msg) {
         messages : []
       };
     }
+
+    if (visible == null) {
+        visible = msg.socket_id;
+        socketLi.className = "active";
+      } else {
+        //switch to new tab
+        sockets[visible].pane2Table.style.display = "none";
+        sockets[visible].socketLi.className = ".disabled";
+        sockets[msg.socket_id].pane2Table.style.display = "block";
+        sockets[msg.socket_id].socketLi.className = "active";
+        $("#clearButton").data("socket", msg.socket_id);
+        visible = msg.socket_id;
+      }
 
     // create new row upon receiving message
     var pane2Table = sockets[msg.socket_id].pane2Table;
