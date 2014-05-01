@@ -369,10 +369,10 @@
   };
 
   // enable toggling between XHR versions
-  document.addEventListener('Socket.io.ResumeXHR', function(e) {
+  document.addEventListener('Socket.io.StartMonitor', function(e) {
     window.XMLHttpRequest = cXMLHttpRequest;
   });
-  document.addEventListener('Socket.io.SuspendXHR', function(e) {
+  document.addEventListener('Socket.io.StopMonitor', function(e) {
     window.XMLHttpRequest = oXMLHttpRequest;
   });
 })();

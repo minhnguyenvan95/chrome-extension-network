@@ -22,6 +22,36 @@ $("#clearButton").click(function(e){
   pane2.appendChild(info);
 });
 
+$("#recordButton")
+  .click(function(e) {
+    var label = document.getElementById("recordStatus");
+    if (e.target.className.indexOf("off") >= 0) {
+      e.target.className = "recordButton on";
+      label.innerText = "Recording";
+      chrome.runtime.sendMessage({type: "monitor_on", obj: {tab: chrome.devtools.inspectedWindow.tab_id}});
+    } else {
+      e.target.className = "recordButton off";
+      label.innerText = "";
+      chrome.runtime.sendMessage({type: "monitor_off", obj: {tab: chrome.devtools.inspectedWindow.tab_id}});
+    }
+    label.oldText = label.innerText;
+  })
+  .hover(function(e) {
+    e.target.className += " hover";
+    var label = document.getElementById("recordStatus");
+    label.oldText = label.innerText;
+
+    if (e.target.className.indexOf("off") >= 0) {
+      label.innerText = "Start Recording";
+    } else {
+      label.innerText = "Stop Recording";
+    }
+  }, function(e) {
+    e.target.className = e.target.className.replace(" hover", "");
+    var label = document.getElementById("recordStatus");
+    label.innerText = label.oldText;
+  });
+
 $("#opener").click(function(e){
     var panel = $('#slide-panel');
     if (panel.hasClass("visible")) {

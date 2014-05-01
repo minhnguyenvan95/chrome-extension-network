@@ -48,11 +48,11 @@ chrome.runtime.onMessage.addListener(
     console.log(req.type);
 
     switch(req.type) {
-      case('suspend.xhr'):
-        document.dispatchEvent(new CustomEvent('Socket.io.SuspendXHR', {}));
+      case('monitor_off'):
+        document.dispatchEvent(new CustomEvent('Socket.io.StopMonitor', {}));
         break;
-      case('resume.xhr'):
-        document.dispatchEvent(new CustomEvent('Socket.io.ResumeXHR', {}));
+      case('monitor_on'):
+        document.dispatchEvent(new CustomEvent('Socket.io.StartMonitor', {}));
         break;
     }
 

@@ -22,16 +22,9 @@ chrome.extension.onConnect.addListener(function (port) {
     tab_id: tab_id
   };
 
-  // resume overrides, if needed
-  chrome.tabs.sendMessage(tab_id, {type: 'resume.xhr'}, function(response) {
-  });
-
-
-
   port.onDisconnect.addListener(function (message) {
     // unload overrides
-    chrome.tabs.sendMessage(tab_id, {type: 'suspend.xhr'}, function(response) {
-    });
+    chrome.tabs.sendMessage(tab_id, {type: 'stop-monitor'}, function(response) {});
     delete ports[port_id];
   });
 });
@@ -56,6 +49,12 @@ chrome.extension.onMessage.addListener(function(req, sender, res) {
           ports[port_id].port.postMessage(req.obj);
         }
       }
+      break;
+    case 'monitor_off':
+      chrome.tabs.sendMessage(req.obj.tab, {type: 'monitor_off'});
+      break;
+    case 'monitor_on':
+      chrome.tabs.sendMessage(req.obj.tab, {type: 'monitor_on'});
       break;
     case 'tab.register':
       res({ tab_id: sender.tab.id });
