@@ -24,8 +24,7 @@ chrome.extension.onConnect.addListener(function (port) {
 
   port.onDisconnect.addListener(function (message) {
     // unload overrides
-    chrome.tabs.sendMessage(tab_id, {type: 'stop-monitor'}, function(response) {
-    });
+    chrome.tabs.sendMessage(tab_id, {type: 'stop-monitor'}, function(response) {});
     delete ports[port_id];
   });
 });
