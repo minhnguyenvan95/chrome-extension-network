@@ -2,8 +2,59 @@ body {
   overflow: hidden;
 }
 
-h3{
-  margin-top:0px;
+h3 {
+  margin-top: 0px;
+  font-size: 14pt;
+  display: inline;
+}
+
+#recording {
+  display: block;
+  float: right;
+  position: relative;
+  bottom: 2pt;
+}
+
+.recordStatus {
+  font-size: 14pt;
+  display: inline-block;
+  color: #4a4a4a;
+  margin-top: 0px;
+  text-align: right;
+  position: absolute;
+  right: 18pt;
+  white-space: nowrap;
+}
+
+.recordButton {
+  border-radius: 50%;
+  border-style: none;
+  width: 14pt;
+  height: 14pt;
+  display: inline-block;  
+  box-shadow: inset 0pt 1pt 2pt #4a4a4a;
+  margin-top: 0px;
+  position: absolute;
+  top: 3pt;
+  right: 0pt;
+}
+
+.recordButton.on  {
+  background-color: #ff0000;
+  box-shadow: 0pt 0pt 4pt #ff0000, inset 0pt 1pt 2pt #4a4a4a;
+}
+
+.recordButton.off  {
+  background-color: #9c9c9c;
+}
+
+.recordButton.on.hover {
+  background-color: #9c9c9c;
+  box-shadow: inset 0pt 1pt 2pt #4a4a4a;
+}
+
+.recordButton.off.hover {
+  background-color: #c65d59;
 }
 
 #slide-panel {

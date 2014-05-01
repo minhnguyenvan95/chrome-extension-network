@@ -1,4 +1,3 @@
-
 // console.log in bg
 var bglog = function(obj) {
   if (chrome && chrome.runtime) {
@@ -11,5 +10,4 @@ chrome.devtools.panels.create(
     null,
     "panel.html",
     function(panel){
-      bglog('Socket.io panel created');
-});
+    });

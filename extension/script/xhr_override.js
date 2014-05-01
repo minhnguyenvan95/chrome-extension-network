@@ -91,6 +91,18 @@
       nState    = this.readyState,
       fOnUnload;
 
+    // BUGFIX: IE - memory leak on page unload (inter-page leak)
+    if (bIE && bAsync) {
+      fOnUnload = function() {
+        if (nState != cXMLHttpRequest.DONE) {
+          fCleanTransport(oRequest);
+          // Safe to abort here since onreadystatechange handler removed
+          oRequest.abort();
+        }
+      };
+      window.attachEvent("onunload", fOnUnload);
+    }
+
     // Add method sniffer
     if (cXMLHttpRequest.onopen)
       cXMLHttpRequest.onopen.apply(this, arguments);
@@ -127,6 +139,10 @@
         // Free up queue
         delete oRequest._data;
         fCleanTransport(oRequest);
+
+        // BUGFIX: IE - memory leak in interrupted
+        if (bIE && bAsync)
+          window.detachEvent("onunload", fOnUnload);
       }
 
       // BUGFIX: Some browsers (Internet Explorer, Gecko) fire OPEN readystate twice
@@ -336,14 +352,27 @@
   };
 
   function fCleanTransport(oRequest) {
+    // BUGFIX: IE - memory leak (on-page leak)
+    // oRequest._object.onreadystatechange = new window.Function;
     oRequest._object.onreadystatechange = null;
   };
 
+  // Internet Explorer 5.0 (missing apply)
+  if (!window.Function.prototype.apply) {
+    window.Function.prototype.apply  = function(oRequest, oArguments) {
+      if (!oArguments)
+        oArguments  = [];
+      oRequest.__func  = this;
+      oRequest.__func(oArguments[0], oArguments[1], oArguments[2], oArguments[3], oArguments[4]);
+      delete oRequest.__func;
+    };
+  };
+
   // enable toggling between XHR versions
-  document.addEventListener('Socket.io.ResumeXHR', function(e) {
+  document.addEventListener('Socket.io.StartMonitor', function(e) {
     window.XMLHttpRequest = cXMLHttpRequest;
   });
-  document.addEventListener('Socket.io.SuspendXHR', function(e) {
+  document.addEventListener('Socket.io.StopMonitor', function(e) {
     window.XMLHttpRequest = oXMLHttpRequest;
   });
 })();

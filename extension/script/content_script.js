@@ -33,6 +33,8 @@ document.addEventListener('Socket.io.SocketEvent', function(e) {
   e.detail.tab_id = tab_id;
   e.detail.timestamp = e.timestamp;
 
+  console.log(e.detail);
+
   chrome.extension.sendMessage({
     type: e.detail.event,
     obj: e.detail,
@@ -45,11 +47,11 @@ chrome.runtime.onMessage.addListener(
     console.log(req.type);
 
     switch(req.type) {
-      case('suspend.xhr'):
-        document.dispatchEvent(new CustomEvent('Socket.io.SuspendXHR', {}));
+      case('monitor_off'):
+        document.dispatchEvent(new CustomEvent('Socket.io.StopMonitor', {}));
         break;
-      case('resume.xhr'):
-        document.dispatchEvent(new CustomEvent('Socket.io.ResumeXHR', {}));
+      case('monitor_on'):
+        document.dispatchEvent(new CustomEvent('Socket.io.StartMonitor', {}));
         break;
     }
 
