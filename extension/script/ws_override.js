@@ -3,8 +3,6 @@
   var captured = false;
   if (typeof oWebSocket == "undefined") {
     var oWebSocket = WebSocket;
-    console.log("this:");
-    console.log(this);
   }
 
   if (!captured) {

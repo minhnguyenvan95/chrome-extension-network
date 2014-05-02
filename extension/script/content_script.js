@@ -8,7 +8,7 @@ var shouldOverrideSockets = false;
 chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
   tab_id = res.tab_id;
   shouldOverrideSockets = res.should_override;
-  console.log('my tab id: ' + tab_id + ((window.shouldOverrideSockets) ? (' (monitoring on)') : (' (monitoring off)')));
+  console.log('Inspecting Socket.IO activity on tab ' + tab_id + ((window.shouldOverrideSockets) ? (' (monitoring on)') : (' (monitoring off)')));
   loadScripts();
 }.bind(this));
 
@@ -39,8 +39,6 @@ document.addEventListener('Socket.io.SocketEvent', function(e) {
   e.detail.timestamp = e.timestamp;
   e.detail.url = document.URL;
 
-  console.log(e.detail);
-
   chrome.extension.sendMessage({
     type: e.detail.event,
     obj: e.detail,
@@ -50,14 +48,15 @@ document.addEventListener('Socket.io.SocketEvent', function(e) {
 
 chrome.runtime.onMessage.addListener(
   function(req, sender, res) {
-    console.log(req.type);
 
     switch(req.type) {
       case('monitor_off'):
         document.dispatchEvent(new CustomEvent('Socket.io.StopMonitor', {}));
+        console.log("Socket.IO monitoring off");
         break;
       case('monitor_on'):
         document.dispatchEvent(new CustomEvent('Socket.io.StartMonitor', {}));
+        console.log("Socket.IO monitoring on");
         break;
     }
 });
