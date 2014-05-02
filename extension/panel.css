@@ -73,10 +73,11 @@ h4{
   right: -300px;
 }
 
-#clearButton{
+#clearButton {
   padding: 3px 3px 4px 4px;
-  float:right;
+  float: right;
   margin-right: 20px;
+  cursor: default;
 }
 
 #opener {
@@ -264,66 +265,3 @@ h4{
   border-color: #A4ACB4;
   border-style: solid;
 }
-/*b{font-size: 110%;}
-em{color: red;}
-
-#topsection{
-background: #EAEAEA;
-height: 90px; 
-}
-
-#topsection h1{
-margin: 0;
-padding-top: 15px;
-}
-
-#contentwrapper{
-float: left;
-width: 100%;
-}
-
-#contentcolumn{
-margin: 0 200px 0 230px; 
-}
-#leftcolumn{
-float: left;
-width: 200px; 
-margin-left: -100%;
-background: #C8FC98;
-height: 100%;
-}
-
-#rightcolumn{
-float: left;
-width: 200px; 
-margin-left: -200px; 
-background: #FDE95E;
-height: 100%;
-}
-
-#footer{
-clear: left;
-width: 100%;
-background: black;
-color: #FFF;
-text-align: center;
-padding: 4px 0;
-}
-
-#footer a{
-color: #FFFF80;
-}
-
-.socket_msg_type{
-color: #F00;
-}
-
-ul{
-list-style-type: none;
-border: 5px 5px 5px 5px;
-}
-
-.innertube{
-margin: 10px; 
-margin-top: 0;
-*/

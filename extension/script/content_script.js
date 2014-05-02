@@ -8,7 +8,7 @@ var shouldOverrideSockets = false;
 chrome.extension.sendMessage({ type: 'tab.register' }, function (res) {
   tab_id = res.tab_id;
   shouldOverrideSockets = res.should_override;
-  console.log('Inspecting Socket.IO activity on tab ' + tab_id + ((window.shouldOverrideSockets) ? (' (monitoring on)') : (' (monitoring off)')));
+  console.log('Inspecting Socket.IO activity of \'' + document.title + '\' on tab ' + tab_id + ((window.shouldOverrideSockets) ? (' (monitoring on)') : (' (monitoring off)')));
   loadScripts();
 }.bind(this));
 
