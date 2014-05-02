@@ -16,6 +16,8 @@
 
 (function () {
 
+  var scriptName = "xhr_override.js";
+
   // Save reference to earlier defined object implementation (if any)
   var oXMLHttpRequest  = window.XMLHttpRequest;
 
@@ -367,6 +369,19 @@
       delete oRequest.__func;
     };
   };
+
+  var scriptId = -1;
+  for (var i = 0; i < document.scripts.length; i++) {
+    if (document.scripts[i].src.indexOf(scriptName) >= 0) {
+      scriptId = i;
+      break;
+    }
+  }
+  if (scriptId >= 0 && document.scripts[scriptId].getAttribute("should-override-sockets") == "true") {
+    window.XMLHttpRequest = cXMLHttpRequest;
+  } else {
+    window.XMLHttpRequest = oXMLHttpRequest;
+  }
 
   // enable toggling between XHR versions
   document.addEventListener('Socket.io.StartMonitor', function(e) {

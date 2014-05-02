@@ -1,5 +1,6 @@
 // Initial background page setup
 var ports = [];
+var shouldOverride = [];
 var uniq_id = 0;
 
 // Set up communication channel with devtools
@@ -21,6 +22,10 @@ chrome.extension.onConnect.addListener(function (port) {
     port: port,
     tab_id: tab_id
   };
+
+  if (shouldOverride[tab_id] == undefined) {
+    shouldOverride[tab_id] = false;
+  }
 
   port.onDisconnect.addListener(function (message) {
     // unload overrides
@@ -51,13 +56,17 @@ chrome.extension.onMessage.addListener(function(req, sender, res) {
       }
       break;
     case 'monitor_off':
+      console.log("monitoring disabled for tab " + req.obj.tab);
       chrome.tabs.sendMessage(req.obj.tab, {type: 'monitor_off'});
+      shouldOverride[req.obj.tab] = false;
       break;
     case 'monitor_on':
+      console.log("monitoring enabled for tab " + req.obj.tab);
       chrome.tabs.sendMessage(req.obj.tab, {type: 'monitor_on'});
+      shouldOverride[req.obj.tab] = true;
       break;
     case 'tab.register':
-      res({ tab_id: sender.tab.id });
+      res({ tab_id: sender.tab.id, should_override: shouldOverride[sender.tab.id] });
       break;
   }
 });

@@ -1,7 +1,10 @@
 (function() {
+  var scriptName = "ws_override.js";
   var captured = false;
   if (typeof oWebSocket == "undefined") {
     var oWebSocket = WebSocket;
+    console.log("this:");
+    console.log(this);
   }
 
   if (!captured) {
@@ -57,8 +60,7 @@
       return oWebSocket.prototype.send.apply(this, arguments);
     }
 
-    // capture constructor
-    this.WebSocket = function(a,b) {
+    cWebSocket = function(a,b) {
       var base;
       base = (typeof b !== "undefined") ? new oWebSocket(a,b) : new oWebSocket(a);
       captureRecv(base);
@@ -67,8 +69,28 @@
       var urlTokens = base.url.split('/');
       base.socketId = urlTokens[urlTokens.length-1];
       return base;
-    }
-
+    };
     captured = true;
   }
+
+  var scriptId = -1;
+  for (var i = 0; i < document.scripts.length; i++) {
+    if (document.scripts[i].src.indexOf(scriptName) >= 0) {
+      scriptId = i;
+      break;
+    }
+  }
+  if (scriptId >= 0 && document.scripts[scriptId].getAttribute("should-override-sockets") == "true") {
+    window.WebSocket = cWebSocket;
+  } else {
+    window.WebSocket = oWebSocket;
+  }
+
+  // enable toggling between WebSocket versions
+  document.addEventListener('Socket.io.StartMonitor', function(e) {
+    window.WebSocket = cWebSocket;
+  });
+  document.addEventListener('Socket.io.StopMonitor', function(e) {
+    window.WebSocket = oWebSocket;
+  });
 })();

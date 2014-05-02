@@ -28,11 +28,11 @@ $("#recordButton")
     if (e.target.className.indexOf("off") >= 0) {
       e.target.className = "recordButton on";
       label.innerText = "Recording";
-      chrome.runtime.sendMessage({type: "monitor_on", obj: {tab: chrome.devtools.inspectedWindow.tab_id}});
+      chrome.runtime.sendMessage({type: "monitor_on", obj: {tab: chrome.devtools.inspectedWindow.tabId}});
     } else {
       e.target.className = "recordButton off";
       label.innerText = "";
-      chrome.runtime.sendMessage({type: "monitor_off", obj: {tab: chrome.devtools.inspectedWindow.tab_id}});
+      chrome.runtime.sendMessage({type: "monitor_off", obj: {tab: chrome.devtools.inspectedWindow.tabId}});
     }
     label.oldText = label.innerText;
   })
@@ -107,6 +107,11 @@ port.onMessage.addListener(function (msg) {
 
   // check for message corresponding to other browser tabs
   if (msg.tab_id != chrome.devtools.inspectedWindow.tabId) {
+    return;
+  }
+
+  // check if monitoring is "off" but messages are still coming in over WS
+  if (document.getElementById("recordButton").className.indexOf("off") >= 0) {
     return;
   }
 

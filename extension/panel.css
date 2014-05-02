@@ -13,6 +13,7 @@ h3{
   float: right;
   position: relative;
   bottom: 2pt;
+  padding-bottom: 8pt;
 }
 
 .recordStatus {
@@ -231,6 +232,7 @@ h4{
   list-style-type: none;
   width: 100%;
   text-align: center;
+  margin-top: 2pt;
 }
 
 #socketList li{

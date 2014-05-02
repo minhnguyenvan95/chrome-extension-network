@@ -43,4 +43,4 @@ io.sockets.on('connection', function (socket) {
 });
 
 // only use xhr for now
-//io.set('transports', ['xhr-polling']);
+// io.set('transports', ['xhr-polling']);
