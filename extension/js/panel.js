@@ -5,6 +5,10 @@ var bglog = function(obj) {
   }
 }
 
+$.fn.scrollBottom = function() { 
+  return $(document).height() - this.scrollTop() - this.height(); 
+};
+
 $("#clearButton").click(function(e){
  // var table = document.getElementById("dataTable");
   var table = sockets[$("#clearButton").data("socket")].pane2Table;
@@ -147,7 +151,7 @@ port.onMessage.addListener(function (msg) {
       var socketLi = document.createElement("li")
       var a = document.createElement("a");
 
-      a.innerText = msg.socket_id;
+      a.innerText = "Socket " + msg.socket_id.substring(msg.socket_id.length-3);
 
       socketLi.addEventListener("click", function(e) {
         // change messages displayed in center panel
@@ -239,5 +243,7 @@ port.onMessage.addListener(function (msg) {
 
     // keep track of the message in the socket object
     sockets[msg.socket_id].messages.push(msg);
+
+    $('#Pane-2').stop().animate({ scrollTop: $("#Pane-2")[0].scrollHeight }, 500);
   }
 });
