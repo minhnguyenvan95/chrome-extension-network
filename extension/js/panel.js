@@ -1,3 +1,6 @@
+var sockets = {};
+var visible = null;
+
 // util function
 var bglog = function(obj) {
   if (chrome && chrome.runtime) {
@@ -10,7 +13,6 @@ $.fn.scrollBottom = function() {
 };
 
 $("#clearButton").click(function(e){
- // var table = document.getElementById("dataTable");
   var table = sockets[$("#clearButton").data("socket")].pane2Table;
   var tableRows = table.getElementsByTagName('tr');
   var rowCount = tableRows.length;
@@ -94,8 +96,6 @@ var port = chrome.extension.connect({
   name: 'socket.io-'+chrome.devtools.inspectedWindow.tabId
 });
 
-var sockets = {};
-var visible = null;
 
 // Handle response from background page
 // Should add a visible element representing socket data to the devtool panel
@@ -140,9 +140,9 @@ port.onMessage.addListener(function (msg) {
   }
 
   if (msg.event == "socket_emit" || msg.event == "socket_listen") {
-
     //remove info messages if sockets are added
     $("#Pane-1-Info").remove();
+
     // create new message list on a new socket id
     if (sockets[msg.socket_id] == undefined) {
 
@@ -151,17 +151,21 @@ port.onMessage.addListener(function (msg) {
       var socketLi = document.createElement("li")
       var a = document.createElement("a");
 
+      // Make the socket name more user friendly
       a.innerText = "Socket " + msg.socket_id.substring(msg.socket_id.length-3);
+      a.setAttribute('data-socket-id', msg.socket_id);
 
       socketLi.addEventListener("click", function(e) {
         // change messages displayed in center panel
-        var clicked = e.target.innerText;
-        sockets[visible].pane2Table.style.display = "none";
-        sockets[visible].socketLi.className = ".disabled";
-        sockets[clicked].pane2Table.style.display = "block";
-        sockets[clicked].socketLi.className = "active";
-        $("#clearButton").data("socket", clicked);
-        visible = clicked;
+        var clicked = e.target.getAttribute('data-socket-id');
+        if (clicked && (visible !== clicked)) {
+          sockets[visible].pane2Table.style.display = "none";
+          sockets[visible].socketLi.className = ".disabled";
+          sockets[clicked].pane2Table.style.display = "block";
+          sockets[clicked].socketLi.className = "active";
+          $("#clearButton").data("socket", clicked);
+          visible = clicked;
+        }
       });
 
       socketLi.appendChild(a);
@@ -176,7 +180,6 @@ port.onMessage.addListener(function (msg) {
                              '<td>url</td>' +
                              '<td>arguments</td>';
       pane2Table.appendChild(header_row);
-
 
       //add to sockets list
       sockets[msg.socket_id] = {

@@ -1,6 +1,6 @@
 // deps
-var express = require('express')
-  , sio = require('socket.io');
+var express = require('express');
+var sio = require('socket.io');
 
 // create app
 app = express.createServer(
@@ -15,10 +15,10 @@ app.listen(8000);
 var io = sio.listen(app);
 
 io.sockets.on('connection', function(socket){
-	socket.on('join', function(name){
-		socket.nickname = name;
-		socket.broadcast.emit('announcement', name + ' joined the chat.');
-	    });
+  socket.on('join', function(name){
+    socket.nickname = name;
+    socket.broadcast.emit('announcement', name + ' joined the chat.');
+      });
     });
 io.sockets.on('connection', function (socket) {
 
@@ -28,7 +28,7 @@ io.sockets.on('connection', function (socket) {
     // confirm the reception
     fn(Date.now());
   });
-  
+
   socket.on('numbers', function (n1, n2, n3, fn) {
     socket.broadcast.emit('numbers', socket.nickname, n1, n2, n3);
 

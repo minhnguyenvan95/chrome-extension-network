@@ -1,7 +1,6 @@
 window.onload = function () {
   var socket = io.connect();
   var nickname;
-  window.socket = socket;             // TODO reconsider how we get this
 
   socket.on('connect', function () {
     // Get user nickname
