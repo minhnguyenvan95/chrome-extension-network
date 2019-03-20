@@ -4,3 +4,4 @@ extension.pem
 test/
 
 \.idea/
+.env

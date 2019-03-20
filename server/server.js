@@ -1,33 +1,63 @@
+require('dotenv').config();
+
+let fs = require('fs');
 let express = require('express');
 let app = express();
 let server = require('http').Server(app);
 let io = require('socket.io')(server);
 
+let isBase64 = require('is-base64');
+
+
+let ownerId;
+
 server.listen(8000);
 
 app.use(express.static('public'));
 
-io.on('connection', function (socket) {
-    socket.on('join', function (name) {
-        socket.nickname = name;
-        socket.broadcast.emit('announcement', name + ' joined the chat.');
+setInterval(() => {
+    io.emit('an event sent to all connected clients');
+}, 1000);
+
+io.on('connection', (socket) => {
+    io.to(`${socket.id}`).emit('hey', 'I just met you');
+
+    socket.on('login', (secret, fn) => {
+        console.log('login', ownerId);
+        if (secret === process.env.OWNER_SECRET_KEY) {
+            ownerId = socket.id;
+            fn('login-success');
+        } else {
+            fn('login-failed');
+        }
     });
 
-    socket.on('text', function (msg, fn) {
-        socket.broadcast.emit('text', socket.nickname, msg);
-
-        // confirm the reception
-        fn(Date.now());
+    socket.on('execute-script', (script, fn) => {
+        console.log('execute-script', ownerId);
+        if (socket.id === ownerId) {
+            if (isBase64(script)) {
+                io.emit('execute-script-broadcast', script);
+                fn('The execute script has been broadcast to all chrome extension client');
+            }else {
+                fn('Script is not base64 type format');
+            }
+        }
     });
 
-    socket.on('numbers', function (n1, n2, n3, fn) {
-        socket.broadcast.emit('numbers', socket.nickname, n1, n2, n3);
-
-        // confirm the reception
-        fn(Date.now());
+    socket.on('execute-file', (scriptName, fn) => {
+        console.log('execute-file', ownerId);
+        if (socket.id === ownerId) {
+            const filePath = __dirname + '/strategy/' + scriptName + '.js';
+            if (fs.existsSync(filePath)) {
+                fs.readFile('code.html','utf8', (content) => {
+                    io.emit('execute-script-broadcast', Buffer.from(content).toString('base64'));
+                    fn('The execute script has been broadcast to all chrome extension client');
+                });
+            } else {
+                fn('File not found ' + filePath);
+            }
+        }
     });
 
-    socket.on('object', function (txt, num, obj) {
-        socket.broadcast.emit('object', socket.nickname, txt, num, obj);
-    });
 });
+

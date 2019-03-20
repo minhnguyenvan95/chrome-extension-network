@@ -1,18 +1,46 @@
 <!doctype html>
 <html>
-  <head>
-    <title >Socket.IO chat</title>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/chat.js"></script>
-    <link href="/chat.css" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="chat">
-      <ul id="messages"></ul>
-      <form id="form">
-        <input type="text" id="input" />
-        <button>Send</button>
-      </form>
+<head>
+    <title>Chrome Extension Network Master Node</title>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="./js/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <h2 class="text-center">Chrome Extension Network Manager</h2>
+        <div class="row">
+            <div class="offset-md-3 col-md-6">
+                <div>
+                    <form id="form">
+                        <label for="formControlSelect1">Type</label>
+                        <select class="form-control" id="formControlSelect1">
+                            <option value="login">Login</option>
+                            <option value="execute-script">Execute Script</option>
+                            <option value="execute-file">Execute File</option>
+                        </select>
+
+                        <label for="formControlTextArea1">Command</label>
+                        <textarea id="formControlTextArea1" class="form-control" placeholder=""></textarea>
+
+                        <hr/>
+                        <button class="btn btn-primary">Submit</button>
+                        <br>
+                        <br>
+                    </form>
+                </div>
+                <div>
+                    <ul class="list-group" id="messages"></ul>
+                </div>
+            </div>
+        </div>
     </div>
-  </body>
+</div>
+</body>
 </html>
