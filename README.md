@@ -10,7 +10,7 @@ A cross-platform browser extension to visualize socket.io requests
 
 # Installation (unpacked);
 - Clone the repository
-- In chrome, naviagte to chrome://extensions
+- In chrome, navigate to chrome://extensions
 - Select 'load unpacked extension' and select the 'extension' subfolder from this repository
 
 # Extension architecture
