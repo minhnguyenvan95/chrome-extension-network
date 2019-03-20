@@ -2,3 +2,5 @@
 node_modules
 extension.pem
 test/
+
+\.idea/
