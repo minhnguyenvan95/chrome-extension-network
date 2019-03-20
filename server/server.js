@@ -1,26 +1,17 @@
-// deps
 let express = require('express');
-let sio = require('socket.io');
+let app = express();
+let server = require('http').Server(app);
+let io = require('socket.io')(server);
 
-// create app
-app = express.createServer(
-    express.bodyParser()
-    , express.static('public')
-);
+server.listen(8000);
 
-// listen
-app.listen(8000);
+app.use(express.static('public'));
 
-// sio
-let io = sio.listen(app);
-
-io.sockets.on('connection', function (socket) {
+io.on('connection', function (socket) {
     socket.on('join', function (name) {
         socket.nickname = name;
         socket.broadcast.emit('announcement', name + ' joined the chat.');
     });
-});
-io.sockets.on('connection', function (socket) {
 
     socket.on('text', function (msg, fn) {
         socket.broadcast.emit('text', socket.nickname, msg);
@@ -39,8 +30,4 @@ io.sockets.on('connection', function (socket) {
     socket.on('object', function (txt, num, obj) {
         socket.broadcast.emit('object', socket.nickname, txt, num, obj);
     });
-
 });
-
-// only use xhr for now
-// io.set('transports', ['xhr-polling']);
