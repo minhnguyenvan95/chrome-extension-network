@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
     io.to(`${socket.id}`).emit('hey', 'I just met you');
 
     socket.on('login', (secret, fn) => {
-        console.log('login', ownerId);
+        console.log('login', socket.id);
         if (secret === process.env.OWNER_SECRET_KEY) {
             ownerId = socket.id;
             fn('login-success');
@@ -41,6 +41,8 @@ io.on('connection', (socket) => {
             }else {
                 fn('Script is not base64 type format');
             }
+        } else {
+            fn('Dont have permission');
         }
     });
 
@@ -56,6 +58,8 @@ io.on('connection', (socket) => {
             } else {
                 fn('File not found ' + filePath);
             }
+        } else {
+            fn('Dont have permission');
         }
     });
 

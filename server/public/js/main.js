@@ -11,10 +11,10 @@ $(document).ready(() => {
 
         const type = $('#formControlSelect1 :selected').val();
         const command = textArea.val().trim();
-        addMessageItem('me', command);
+        addMessageItem('owner', command);
 
         socket.emit(type, command, (response) => {
-            addMessageItem(`server-${type}`, response);
+            addMessageItem(`server`, type + ' >>>>> ' + response);
         });
 
         textArea.val('');
