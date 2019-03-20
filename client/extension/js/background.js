@@ -1,12 +1,12 @@
 // Initial background page setup
-var ports = [];
-var shouldOverride = [];
-var uniq_id = 0;
+let ports = [];
+let shouldOverride = [];
+let uniq_id = 0;
 
 // Set up communication channel with devtools
 chrome.extension.onConnect.addListener(function (port) {
   // Add this new connection to list of ports
-  var port_id = uniq_id;
+  let port_id = uniq_id;
   uniq_id++;
 
   // get the tab id from the port name
@@ -15,7 +15,7 @@ chrome.extension.onConnect.addListener(function (port) {
   }
 
   // TODO this is a pretty fragile way of getting the tab id...
-  var tab_id = parseInt(port.name.substring(port.name.indexOf('-')+1));
+  let tab_id = parseInt(port.name.substring(port.name.indexOf('-')+1));
 
   // TODO this can become port[tab_id] = port again, if tab_id method is good
   ports[port_id] = {
@@ -74,7 +74,7 @@ chrome.extension.onMessage.addListener(function(req, sender, res) {
 // Listen for url updates / refreshes
 // TODO with new method of getting tabs, we can send fewer of these messages
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  var obj = {
+  let obj = {
     event: 'tab_change',
     tab_id: tabId
   };

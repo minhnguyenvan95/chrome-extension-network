@@ -1,5 +1,5 @@
 // console.log in bg
-var bglog = function(obj) {
+let bglog = function(obj) {
   if (chrome && chrome.runtime) {
     chrome.runtime.sendMessage({type: "bglog", obj: obj});
   }

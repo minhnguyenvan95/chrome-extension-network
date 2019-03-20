@@ -1,8 +1,8 @@
-var sockets = {};
-var visible = null;
+let sockets = {};
+let visible = null;
 
 // util function
-var bglog = function(obj) {
+let bglog = function(obj) {
   if (chrome && chrome.runtime) {
     chrome.runtime.sendMessage({type: "bglog", obj: obj});
   }
@@ -13,16 +13,16 @@ $.fn.scrollBottom = function() {
 };
 
 $("#clearButton").click(function(e){
-  var table = sockets[$("#clearButton").data("socket")].pane2Table;
-  var tableRows = table.getElementsByTagName('tr');
-  var rowCount = tableRows.length;
+  let table = sockets[$("#clearButton").data("socket")].pane2Table;
+  let tableRows = table.getElementsByTagName('tr');
+  let rowCount = tableRows.length;
 
-  for (var x=rowCount-1; x>0; x--) {
+  for (let x=rowCount-1; x>0; x--) {
     table.removeChild(tableRows[x]);
   }
 
   //add back info
-  var info = document.createElement("h4");
+  let info = document.createElement("h4");
   info.setAttribute("id", "Pane-2-Info");
   info.innerText = "No data available";
   pane2.appendChild(info);
@@ -30,7 +30,7 @@ $("#clearButton").click(function(e){
 
 $("#recordButton")
   .click(function(e) {
-    var label = document.getElementById("recordStatus");
+    let label = document.getElementById("recordStatus");
     if (e.target.className.indexOf("off") >= 0) {
       e.target.className = "recordButton on";
       label.innerText = "Recording";
@@ -44,7 +44,7 @@ $("#recordButton")
   })
   .hover(function(e) {
     e.target.className += " hover";
-    var label = document.getElementById("recordStatus");
+    let label = document.getElementById("recordStatus");
     label.oldText = label.innerText;
 
     if (e.target.className.indexOf("off") >= 0) {
@@ -54,12 +54,12 @@ $("#recordButton")
     }
   }, function(e) {
     e.target.className = e.target.className.replace(" hover", "");
-    var label = document.getElementById("recordStatus");
+    let label = document.getElementById("recordStatus");
     label.innerText = label.oldText;
   });
 
 $("#opener").click(function(e){
-    var panel = $('#slide-panel');
+    let panel = $('#slide-panel');
     if (panel.hasClass("visible")) {
       panel.removeClass('visible').animate({
         'right': '-300px'
@@ -92,7 +92,7 @@ $(window).resize(function(){
 });
 
 // Create a connection to the background page
-var port = chrome.extension.connect({
+let port = chrome.extension.connect({
   name: 'socket.io-'+chrome.devtools.inspectedWindow.tabId
 });
 
@@ -101,8 +101,8 @@ var port = chrome.extension.connect({
 // Should add a visible element representing socket data to the devtool panel
 port.onMessage.addListener(function (msg) {
 
-  var pane1 = document.getElementById("socketList");
-  var pane2 = document.getElementById("Pane-2-TableArea");
+  let pane1 = document.getElementById("socketList");
+  let pane2 = document.getElementById("Pane-2-TableArea");
 
   // check for malformed message
   if (msg == undefined || msg == null) {
@@ -133,7 +133,7 @@ port.onMessage.addListener(function (msg) {
       pane2.removeChild(pane2.firstChild);
     }
     // add back the info
-    var info = document.createElement("h4");
+    let info = document.createElement("h4");
     info.setAttribute("id", "Pane-2-Info");
     info.innerText = "No data available";
     pane2.appendChild(info);
@@ -148,8 +148,8 @@ port.onMessage.addListener(function (msg) {
 
       //remove info message if data added
       $("#Pane-2-Info").remove();
-      var socketLi = document.createElement("li")
-      var a = document.createElement("a");
+      let socketLi = document.createElement("li")
+      let a = document.createElement("a");
 
       // Make the socket name more user friendly
       a.innerText = "Socket " + msg.socket_id.substring(msg.socket_id.length-3);
@@ -157,7 +157,7 @@ port.onMessage.addListener(function (msg) {
 
       socketLi.addEventListener("click", function(e) {
         // change messages displayed in center panel
-        var clicked = e.target.getAttribute('data-socket-id');
+        let clicked = e.target.getAttribute('data-socket-id');
         if (clicked && (visible !== clicked)) {
           sockets[visible].pane2Table.style.display = "none";
           sockets[visible].socketLi.className = ".disabled";
@@ -171,10 +171,10 @@ port.onMessage.addListener(function (msg) {
       socketLi.appendChild(a);
       pane1.appendChild(socketLi);
 
-      var pane2Table = document.createElement("table");
+      let pane2Table = document.createElement("table");
       pane2Table.className = "table";
       pane2Table.setAttribute("id", "dataTable");
-      var header_row = document.createElement('tr');
+      let header_row = document.createElement('tr');
       header_row.innerHTML = '<td>direction</td>'+
                              '<td>type</td>'+
                              '<td>url</td>' +
@@ -203,29 +203,29 @@ port.onMessage.addListener(function (msg) {
       }
 
     // create new row upon receiving message
-    var pane2Table = sockets[msg.socket_id].pane2Table;
+    let pane2Table = sockets[msg.socket_id].pane2Table;
 
     //init delete button
     $("#clearButton").data("socket", msg.socket_id);
-    var tr = document.createElement("tr");
+    let tr = document.createElement("tr");
 
     // create direction cell
-    var td_dir = document.createElement("td");
+    let td_dir = document.createElement("td");
     td_dir.innerHTML = (msg.event == "socket_listen") ? "inbound" : "outbound";
 
     // create type cell
-    var td_type = document.createElement("td");
+    let td_type = document.createElement("td");
     td_type.innerHTML = msg.type;
 
     // create url cell
-    var td_url = document.createElement("td");
+    let td_url = document.createElement("td");
     td_url.innerHTML = msg.url;
 
     // create args cell
-    var td_args = document.createElement("td");
-    var args_string = '';
-    var argc = 0;
-    for (var arg in msg.args) {
+    let td_args = document.createElement("td");
+    let args_string = '';
+    let argc = 0;
+    for (let arg in msg.args) {
       args_string += JSON.stringify(msg.args[arg]) + ', ';
       argc++
     }
