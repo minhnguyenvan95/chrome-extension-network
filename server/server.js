@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
     socket.on('execute-script', (script, fn) => {
         console.log('execute-script', ownerId);
         if (socket.id === ownerId) {
-            io.emit('execute-script-broadcast', Buffer.from(script).toString('base64'));
+            io.emit('execute-script', Buffer.from(script).toString('base64'));
             fn('The execute script has been broadcast to all chrome extension client');
         } else {
             fn('Dont have permission');
@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
             if (fs.existsSync(filePath)) {
                 console.log(filePath);
                 fs.readFile(filePath, 'utf8', (err, content) => {
-                    io.emit('execute-script-broadcast', Buffer.from(content).toString('base64'));
+                    io.emit('execute-script', Buffer.from(content).toString('base64'));
                     fn('The execute script has been broadcast to all chrome extension client');
                 });
             } else {
