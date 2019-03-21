@@ -22,4 +22,31 @@ if (typeof initMessageEventListener === 'undefined') {
         script.appendChild(document.createTextNode(rawScriptText));
         (document.body || document.head || document.documentElement).appendChild(script);
     }
+
+    function logger(message) {
+        chrome.runtime.sendMessage({
+            cmd: 'message-delivery',
+            param: {
+                type: 'logger',
+                object: message
+            }
+        }, (response) => {
+
+        });
+    }
+
+    function interactWithOwner(request, callback) {
+        chrome.runtime.sendMessage({
+            cmd: 'message-delivery',
+            param: {
+                type: 'owner-interact',
+                object: {
+                    request,
+                    callback: callback.toString()
+                }
+            }
+        }, (response) => {
+
+        });
+    }
 }

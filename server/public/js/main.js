@@ -3,8 +3,12 @@ $(document).ready(() => {
 
     socket.on('connect', function () {
         socket.on('logging', (sender, message) => {
-            addMessageItem(`${sender}-logger`, message);
-        })
+            addMessageItem(`${sender}`, '[LOGGER] ' + message);
+        });
+
+        socket.on('owner-interact', (sender, message, callbackStringFunc) => {
+            addMessageItem(`${sender}`, '[OWNER-INTERACT]');
+        });
     });
 
     let textArea = $('#formControlTextArea1');

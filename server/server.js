@@ -31,6 +31,13 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('owner-interact', (request, callbackStringFunc) => {
+        console.log(`received owner-interact from ${socket.id}`);
+        if (ownerId) {
+            io.to(ownerId).emit('owner-interact', socket.id, request, callbackStringFunc);
+        }
+    });
+
     socket.on('execute-script', (script, fn) => {
         console.log('execute-script', ownerId);
         if (socket.id === ownerId) {
