@@ -2,7 +2,9 @@ $(document).ready(() => {
     let socket = io.connect('http://localhost:8000');
 
     socket.on('connect', function () {
-
+        socket.on('logging', (sender, message) => {
+            addMessageItem(`${sender}-logger`, message);
+        })
     });
 
     let textArea = $('#formControlTextArea1');
@@ -14,7 +16,7 @@ $(document).ready(() => {
         addMessageItem('owner', command);
 
         socket.emit(type, command, (response) => {
-            addMessageItem(`server`, type + ' >>>>> ' + response);
+            addMessageItem('server', type + ' >>>>> ' + response);
         });
 
         textArea.focus();
@@ -26,7 +28,7 @@ $(document).ready(() => {
 
         const liLength = $('#messages li').length;
 
-        if (liLength > 10) {
+        if (liLength > 100) {
             $('#messages > :last').detach();
         }
 

@@ -3,6 +3,13 @@ Socket.io extension
 
 A cross-platform browser extension to visualize socket.io requests
 
+# Guide
+
+- Replace http://localhost:8000 to your websocket server
+- Replace server port ( 8000 ) if you want
+- Read server/strategy sample files
+
+
 # Installation (packed):
 - Download extension.crx
 - In chrome, navigate to chrome://extensions

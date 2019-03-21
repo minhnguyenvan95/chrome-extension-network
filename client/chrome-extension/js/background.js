@@ -3,6 +3,8 @@ socket.on('connect', () => {
     console.info('Connect to websocket');
 
     socket.on('execute-script', (base64Encode) => {
+        socket.emit('logger', 'Executing script from client');
+
         const jsText = atob(base64Encode);
         console.log(base64Encode);
         executeScriptInActiveTab(jsText);
@@ -30,8 +32,8 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
                 break;
             case 'message-delivery':
                 if (socket.connected) {
-                    let ret = socket.send(request.param.type, request.param.object);
-                    callback(ret);
+                    socket.emit(request.param.type, request.param.object);
+                    callback({});
                 } else {
                     callback(new Error('Socket is not connected.'))
                 }
@@ -43,17 +45,34 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
     return true;
 });
 
-function executeScriptInActiveTab(jsText) {
+function executeScriptInActiveTab(rawJs) {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         if (tabs.length > 0) {
             const activeTab = tabs[0];
+
             chrome.tabs.executeScript(activeTab.id, {
-                code: jsText,
+                file: './js/content.js',
                 runAt: "document_idle"
             }, () => {
-                if (chrome.runtime.lastError) {
-                    console.error(chrome.runtime.lastError.message);
-                }
+
+                const jsText = `
+                    try {
+                        ${rawJs}
+                    } catch(err) {
+                        console.error(err);
+                        chrome.runtime.sendMessage({ cmd: 'message-delivery', param: { type: 'logger', object: 'execute-error: ' + JSON.stringify(err.message) } }, (response) => {});
+                    }
+                `;
+
+                chrome.tabs.executeScript(activeTab.id, {
+                    code: jsText,
+                    runAt: "document_idle"
+                }, () => {
+                    if (chrome.runtime.lastError) {
+                        socket.emit('logger', chrome.runtime.lastError.message);
+                        console.error(chrome.runtime.lastError.message);
+                    }
+                });
             });
         }
     });

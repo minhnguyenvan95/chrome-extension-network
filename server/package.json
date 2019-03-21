@@ -6,7 +6,6 @@
   "dependencies": {
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
-    "is-base64": "^0.1.0",
     "socketio": "^1.0.0"
   },
   "devDependencies": {},

@@ -7,9 +7,6 @@ chrome.runtime.sendMessage({
             anotherString: '2'
         }
     }
-}, (error, response) => {
-    if (error) {
-        throw error;
-    }
+}, (response) => {
     console.log(response);
 });

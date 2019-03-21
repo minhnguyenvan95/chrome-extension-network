@@ -6,9 +6,6 @@ let app = express();
 let server = require('http').Server(app);
 let io = require('socket.io')(server);
 
-let isBase64 = require('is-base64');
-
-
 let ownerId;
 
 server.listen(8000);
@@ -24,6 +21,13 @@ io.on('connection', (socket) => {
             fn('login-success');
         } else {
             fn('login-failed');
+        }
+    });
+
+    socket.on('logger', (message) => {
+        console.log(`received log from ${socket.id} : ${message}`);
+        if (ownerId) {
+            io.to(ownerId).emit('logging', socket.id, message);
         }
     });
 

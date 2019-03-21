@@ -5,3 +5,4 @@ test/
 
 \.idea/
 .env
+server/package-lock\.json
