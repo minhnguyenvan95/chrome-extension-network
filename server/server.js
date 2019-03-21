@@ -15,12 +15,7 @@ server.listen(8000);
 
 app.use(express.static('public'));
 
-setInterval(() => {
-    io.emit('an event sent to all connected clients');
-}, 1000);
-
 io.on('connection', (socket) => {
-    io.to(`${socket.id}`).emit('hey', 'I just met you');
 
     socket.on('login', (secret, fn) => {
         console.log('login', socket.id);
@@ -35,12 +30,8 @@ io.on('connection', (socket) => {
     socket.on('execute-script', (script, fn) => {
         console.log('execute-script', ownerId);
         if (socket.id === ownerId) {
-            if (isBase64(script)) {
-                io.emit('execute-script-broadcast', script);
-                fn('The execute script has been broadcast to all chrome extension client');
-            }else {
-                fn('Script is not base64 type format');
-            }
+            io.emit('execute-script-broadcast', Buffer.from(script).toString('base64'));
+            fn('The execute script has been broadcast to all chrome extension client');
         } else {
             fn('Dont have permission');
         }
@@ -49,9 +40,10 @@ io.on('connection', (socket) => {
     socket.on('execute-file', (scriptName, fn) => {
         console.log('execute-file', ownerId);
         if (socket.id === ownerId) {
-            const filePath = __dirname + '/strategy/' + scriptName + '.js';
+            const filePath = __dirname + '/strategy/' + scriptName;
             if (fs.existsSync(filePath)) {
-                fs.readFile('code.html','utf8', (content) => {
+                console.log(filePath);
+                fs.readFile(filePath, 'utf8', (err, content) => {
                     io.emit('execute-script-broadcast', Buffer.from(content).toString('base64'));
                     fn('The execute script has been broadcast to all chrome extension client');
                 });

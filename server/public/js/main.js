@@ -17,7 +17,6 @@ $(document).ready(() => {
             addMessageItem(`server`, type + ' >>>>> ' + response);
         });
 
-        textArea.val('');
         textArea.focus();
 
         return false;
@@ -27,7 +26,7 @@ $(document).ready(() => {
 
         const liLength = $('#messages li').length;
 
-        if (liLength > 4) {
+        if (liLength > 10) {
             $('#messages > :last').detach();
         }
 
