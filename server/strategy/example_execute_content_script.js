@@ -11,10 +11,6 @@ let data = {
 
 let z = `
     console.log('Execute as page script');
-    let zdata = ${JSON.stringify(data)};
-    window.postMessage(zdata, "*");
+    window.postMessage(${JSON.stringify(data)}, "*");
     `;
-
-let script = document.createElement('script');
-script.appendChild(document.createTextNode(z));
-(document.body || document.head || document.documentElement).appendChild(script);
+injectScript(z);

@@ -16,4 +16,10 @@ if (typeof initMessageEventListener === 'undefined') {
             }
         }
     });
+
+    function injectScript(rawScriptText) {
+        const script = document.createElement('script');
+        script.appendChild(document.createTextNode(rawScriptText));
+        (document.body || document.head || document.documentElement).appendChild(script);
+    }
 }
