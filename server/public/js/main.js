@@ -52,7 +52,10 @@ $(document).ready(() => {
                 addOwnerInteractRequest(sender, htmlEl);
 
                 setTimeout(() => {
-                    document.querySelector('input[name=captcha]:enabled').focus()
+                    const firstActiveCaptchaInput = document.querySelector('input[name=captcha]:enabled');
+                    if (firstActiveCaptchaInput) {
+                        firstActiveCaptchaInput.focus()
+                    }
                 }, 100)
 
                 $(`#${elId}`).on('submit', (e) => {
@@ -63,7 +66,10 @@ $(document).ready(() => {
                         addMessageItem('server', response);
                     });
                     setTimeout(() => {
-                        document.querySelector('input[name=captcha]:enabled').focus()
+                        const firstActiveCaptchaInput = document.querySelector('input[name=captcha]:enabled');
+                        if (firstActiveCaptchaInput) {
+                            firstActiveCaptchaInput.focus()
+                        }
                     }, 100)
                     return true;
                 });
