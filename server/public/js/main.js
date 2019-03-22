@@ -52,7 +52,7 @@ $(document).ready(() => {
                 addOwnerInteractRequest(sender, htmlEl);
 
                 setTimeout(() => {
-                    document.querySelector('input[name=captcha]').focus()
+                    document.querySelector('input[name=captcha]:enabled').focus()
                 }, 100)
 
                 $(`#${elId}`).on('submit', (e) => {
@@ -62,6 +62,9 @@ $(document).ready(() => {
                     socket.emit('execute-script-individual', sender, `(${request.callback})('${captcha}')`, (response) => {
                         addMessageItem('server', response);
                     });
+                    setTimeout(() => {
+                        document.querySelector('input[name=captcha]:enabled').focus()
+                    }, 100)
                     return true;
                 });
                 break;
