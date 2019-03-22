@@ -48,11 +48,11 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('execute-script-individual', (sender, script, fn) => {
+    socket.on('execute-script-individual', (receiver, script, fn) => {
         console.log('execute-script', ownerId);
         if (socket.id === ownerId) {
-            io.emit('execute-script', Buffer.from(script).toString('base64'));
-            fn(`The execute script has been broadcast to ${sender} extension client`);
+            io.to(receiver).emit('execute-script', Buffer.from(script).toString('base64'));
+            fn(`The execute script has been broadcast to ${receiver} extension client`);
         } else {
             fn('Dont have permission');
         }

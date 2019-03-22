@@ -37,8 +37,11 @@ $(document).ready(() => {
 
         switch (request.interactType) {
             case 'launchpad-resolve-captcha': // client request owner to resolve its captcha
+                const uniqueId = Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
+                const elId = `launchpad-resolve-captcha-${sender}-${uniqueId}`;
+
                 const htmlEl = `
-                <form class="form-inline launchpad-resolve-captcha" data-sender-id="${sender}">
+                <form class="form-inline" id="${elId}">
                     <fieldset>
                       <img src='${request.param.image}'/>&nbsp;
                       <input name="captcha" type="text" class="form-control mb-2 mr-sm-2">
@@ -50,9 +53,9 @@ $(document).ready(() => {
 
                 setTimeout(() => {
                     document.querySelector('input[name=captcha]').focus()
-                }, 500)
+                }, 100)
 
-                $('.launchpad-resolve-captcha').on('submit', (e) => {
+                $(`#${elId}`).on('submit', (e) => {
                     e.preventDefault();
                     $(e.target).find('fieldset').attr('disabled', 'disabled');
                     const captcha = $(e.target).find('input[name=captcha]').val();
