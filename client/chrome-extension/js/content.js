@@ -35,13 +35,14 @@ if (typeof initMessageEventListener === 'undefined') {
         });
     }
 
-    function interactWithOwner(request, callback) {
+    function interactWithOwner(interactType, param, callback) {
         chrome.runtime.sendMessage({
             cmd: 'message-delivery',
             param: {
                 type: 'owner-interact',
                 object: {
-                    request,
+                    param,
+                    interactType,
                     callback: callback.toString()
                 }
             }

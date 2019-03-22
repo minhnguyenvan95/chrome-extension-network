@@ -31,10 +31,10 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('owner-interact', (request, callbackStringFunc) => {
+    socket.on('owner-interact', (request) => {
         console.log(`received owner-interact from ${socket.id}`);
         if (ownerId) {
-            io.to(ownerId).emit('owner-interact', socket.id, request, callbackStringFunc);
+            io.to(ownerId).emit('owner-interact', socket.id, request);
         }
     });
 
@@ -43,6 +43,16 @@ io.on('connection', (socket) => {
         if (socket.id === ownerId) {
             io.emit('execute-script', Buffer.from(script).toString('base64'));
             fn('The execute script has been broadcast to all chrome extension client');
+        } else {
+            fn('Dont have permission');
+        }
+    });
+
+    socket.on('execute-script-individual', (sender, script, fn) => {
+        console.log('execute-script', ownerId);
+        if (socket.id === ownerId) {
+            io.emit('execute-script', Buffer.from(script).toString('base64'));
+            fn(`The execute script has been broadcast to ${sender} extension client`);
         } else {
             fn('Dont have permission');
         }
