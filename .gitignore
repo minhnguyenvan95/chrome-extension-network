@@ -6,3 +6,5 @@ test/
 \.idea/
 .env
 server/package-lock\.json
+
+server/strategy/launchpad\.js
